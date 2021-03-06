@@ -114,6 +114,9 @@ int main(int argc, const char* argv[]) {
 		case'b':
 			//escrita dos pontos da caixa:
 			printf("Caixa\n");
+			f = fopen(argv[3], "w");
+			desenhaCaixa(f, atof(argv[2]), atof(argv[3]), atof(argv[4]));
+			fclose(f);
 			break;
 		case's':
 			//escrita dos pontos da esfera:
