@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -91,6 +92,36 @@ void desenhaCaixa(FILE* f, float tamX, float tamY, float tamZ) {
 	fprintf(f, "%f %f %f\n", -x, -hMax, z);
 	fprintf(f, "%f %f %f\n", -x, hMax, z);
 
+}
+
+/**
+* Função responsável por calcular os pontos que descrevem os vários triângulos
+* que permitem desenhar o cone (colocado no Y positivo e centrado em X == 0 e Z == 0)
+* Esses pontos, depois de calculados, devem ser escritos no ficheiro
+*/
+void desenhaCone(FILE* f, float raioBase, float altura, int nSlices, int nStacks) {
+	fprintf(f, "%d\n", nSlices * nStacks * 3);   //escrita inicial do número de pontos/vértices
+
+	float anguloSlice = 2 * M_PI / nSlices;  //angulo formado entre cada slice
+	float razaoAlturaStacks = (float)altura / nStacks; //descreve a razão entre a altura total do cone e o nº de stacks
+
+	float raioAtual = raioBase;
+	float alturaAtual = 0;
+
+	for (int st = 0; st < nStacks; st++) {
+
+		for (int sl = 0; sl < nSlices; sl++) {
+			float angulo = (float)anguloSlice * sl;
+
+			fprintf(f, "%f %f %f\n", 0, alturaAtual, 0); // escrita do ponto central (x == 0 e z == 0)
+			fprintf(f, "%f %f %f\n", raioAtual * sin(angulo + anguloSlice), alturaAtual, raioAtual * cos(angulo + anguloSlice));
+			fprintf(f, "%f %f %f\n", raioAtual * sin(angulo), alturaAtual, raioAtual * cos(angulo));
+			//dois úlitmos pontos, calculados com base em coordenadas polares
+		}
+
+		raioAtual = (float)((nStacks - st + 1) * raioBase) / nStacks;
+		alturaAtual = razaoAlturaStacks * nStacks;
+	}
 }
 
 /**
