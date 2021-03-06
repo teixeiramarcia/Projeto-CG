@@ -105,22 +105,30 @@ void desenhaCone(FILE* f, float raioBase, float altura, int nSlices, int nStacks
 	float anguloSlice = 2 * M_PI / nSlices;  //angulo formado entre cada slice
 	float razaoAlturaStacks = (float)altura / nStacks; //descreve a razão entre a altura total do cone e o nº de stacks
 
-	float raioAtual = raioBase;
-	float alturaAtual = 0;
+	float raioAtual = raioBase;  //vamos começar a desenhar pela base (onde o raio da stack é o maior)
+	float alturaAtual = 0;       //vamos começar a desenhar pela base e queremos o cone "pousado" no plano XZ
 
 	for (int st = 0; st < nStacks; st++) {
 
 		for (int sl = 0; sl < nSlices; sl++) {
 			float angulo = (float)anguloSlice * sl;
 
-			fprintf(f, "%f %f %f\n", 0, alturaAtual, 0); // escrita do ponto central (x == 0 e z == 0)
-			fprintf(f, "%f %f %f\n", raioAtual * sin(angulo + anguloSlice), alturaAtual, raioAtual * cos(angulo + anguloSlice));
-			fprintf(f, "%f %f %f\n", raioAtual * sin(angulo), alturaAtual, raioAtual * cos(angulo));
-			//dois úlitmos pontos, calculados com base em coordenadas polares
+			//desenhar a base, segundo a regra da mão esquerda, para poder ser visível:
+			if (st == 0) {
+				fprintf(f, "%f %f %f\n", 0, 0.0f, 0); // escrita do ponto central (x == 0 e z == 0)
+				fprintf(f, "%f %f %f\n", raioAtual * sin(anguloSlice + angulo), 0.0f, raioAtual * cos(anguloSlice + angulo));
+				fprintf(f, "%f %f %f\n", raioAtual * sin(angulo), 0.0f, raioAtual * cos(angulo));
+			}
+			else {
+				fprintf(f, "%f %f %f\n", 0, alturaAtual, 0); // escrita do ponto central (x == 0 e z == 0)
+				fprintf(f, "%f %f %f\n", raioAtual * sin(angulo), alturaAtual, raioAtual * cos(angulo));
+				fprintf(f, "%f %f %f\n", raioAtual * sin(angulo + anguloSlice), alturaAtual, raioAtual * cos(angulo + anguloSlice));
+				//dois úlitmos pontos, calculados com base em coordenadas polares
+			}
 		}
 
 		raioAtual = (float)((nStacks - st + 1) * raioBase) / nStacks;
-		alturaAtual = razaoAlturaStacks * nStacks;
+		alturaAtual = razaoAlturaStacks * st;
 	}
 }
 
@@ -145,7 +153,7 @@ int main(int argc, const char* argv[]) {
 		case'b':
 			//escrita dos pontos da caixa:
 			printf("Caixa\n");
-			f = fopen(argv[3], "w");
+			f = fopen(argv[5], "w");
 			desenhaCaixa(f, atof(argv[2]), atof(argv[3]), atof(argv[4]));
 			fclose(f);
 			break;
@@ -156,6 +164,9 @@ int main(int argc, const char* argv[]) {
 		case'c':
 			//escrita dos pontos do cone:
 			printf("Cone\n");
+			f = fopen(argv[6], "w");
+			desenhaCone(f, atof(argv[2]), atof(argv[3]), atof(argv[4]), atof(argv[5]));
+			fclose(f);
 			break;
 		default:
 			printf("Erro, tente novamente!");
