@@ -118,7 +118,14 @@ vector<vector<PTriangle>*> Esfera::getTriangles()
     for(int i=0;i<size-1;i++) // -1 nao faz para ultima slize -> igual á primeira
         triangles.push_back(getSlicePieceTriangles(slicesPoints[i],slicesPoints[i+1]));
     
-    // FALTA APAGAR SLICEPOINTS
+    // free slicesPoints
+    for(auto slice: slicesPoints)
+    {
+        for(auto p: *slice)
+            delete(p);
+        (*slice).clear();
+    }
+    slicesPoints.clear();
 
     return triangles;
 }
