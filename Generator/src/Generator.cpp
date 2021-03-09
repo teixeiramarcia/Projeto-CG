@@ -13,17 +13,18 @@ Generator::Generator(int argc,char** argv)
     if(argc<=3)
         return;
     
-    figura = new string(argv[1]);
+    this->figura = new string(argv[1]);
     
     // figura e/ou numero argumentos invalidos
-    if(!(*this->figura=="plane" && argc==5 || *this->figura=="box" && argc==7 || *this->figura=="sphere" && argc==6
+    if(!(*this->figura=="plane" && argc==4 || *this->figura=="box" && argc==7 || *this->figura=="sphere" && argc==6
         || *this->figura=="cone" && argc==7))
         return;
     
-    fileName = new string(argv[argc-1]);
+    string name(argv[argc-1]);
+    this->fileName = new string(PATH+name);
     
     if(*this->figura=="plane")
-        nArgsFig = 2;
+        nArgsFig = 1;
     else if(*this->figura=="box")
         nArgsFig = 4;
     else if(*this->figura=="sphere")
@@ -68,7 +69,6 @@ string Generator::modelo()
     if(*this->figura=="plane")
     {
         double x = this->argsFig[0];
-        //double z = this->argsFig[1];
 
         model = Figuras::plane(x);
     }

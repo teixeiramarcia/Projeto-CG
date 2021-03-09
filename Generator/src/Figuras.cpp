@@ -6,10 +6,10 @@ using namespace std;
 string Figuras::plane(double x)
 {
     string s;
-    float h = 0.0f;          //todos os pontos terão y == 0
+    float h = 0.0f;          //todos os pontos terï¿½o y == 0
     float lado = x / 2;
     // inserir codigo aqui
-    s.append(to_string(6) + "\n");      //todos os planos são compostos por 6 pontos (2 triângulos)
+    s.append(to_string(6) + "\n");      //todos os planos sï¿½o compostos por 6 pontos (2 triï¿½ngulos)
 
     s.append(to_string(lado) + " " + to_string(h) + " " + to_string(lado) + "\n");
     s.append(to_string(lado) + " " + to_string(h) + " " + to_string(-lado) + "\n");
@@ -18,8 +18,6 @@ string Figuras::plane(double x)
     s.append(to_string(lado) + " " + to_string(h) + " " + to_string(-lado) + "\n");
     s.append(to_string(-lado) + " " + to_string(h) + " " + to_string(-lado) + "\n");
     s.append(to_string(-lado) + " " + to_string(h) + " " + to_string(lado) + "\n");
-
-    printf("%s\n", s.c_str());
 
     // return value
     return s;

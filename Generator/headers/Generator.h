@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#define PATH "../Visualizator/xml/"
+
 class Generator
 {
     public:

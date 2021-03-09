@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "headers/Generator.h"
+#include "./headers/Generator.h"
 
 #define XML "configuration.xml"
 
