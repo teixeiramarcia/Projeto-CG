@@ -68,9 +68,9 @@ string Generator::modelo()
     if(*this->figura=="plane")
     {
         double x = this->argsFig[0];
-        double z = this->argsFig[1];
+        //double z = this->argsFig[1];
 
-        model = Figuras::plane(x,z);
+        model = Figuras::plane(x);
     }
     else if(*this->figura=="box")
     {
