@@ -1,5 +1,6 @@
 #include "../headers/Figuras.h"
 #include "../headers/Esfera.h"
+#include "../headers/Cone.h"
 
 using namespace std;
 
@@ -39,11 +40,7 @@ string Figuras::esfera(double radius,int slices,int stacks)
     return esfera.toString(); 
 }
 
-string Figuras::cone(double radius,double height,int slices,int stacks)
-{
-    string s;
-    // inserir codigo aqui
-
-    // return value
-    return s;
+string Figuras::cone(double radius, double height, int slices, int stacks){
+    Cone cone(radius, height, slices, stacks);
+    return cone.toString(); 
 }

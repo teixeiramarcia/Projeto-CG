@@ -8,7 +8,7 @@ typedef class Esfera
 {
     private:
         double radius;
-        int slices,stacks;
+        int slices, stacks;
 
         std::vector<PPoint3D>* getYoZStackInterceptionPoints();
         PPoint3D rotatePoint_Yaxis(PPoint3D p,double angle);
