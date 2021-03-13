@@ -1,6 +1,7 @@
 #include "../headers/Generator.h"
 #include "../headers/Figuras.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -18,7 +19,10 @@ Generator::Generator(int argc,char** argv)
     // figura e/ou numero argumentos invalidos
     if(!(*this->figura=="plane" && argc==4 || *this->figura=="box" && argc==7 || *this->figura=="sphere" && argc==6
         || *this->figura=="cone" && argc==7))
-        return;
+    {
+        cerr << "Invalid figure or number of arguments\n";
+        exit(1);
+    }
     
     string name(argv[argc-1]);
     this->fileName = new string(PATH+name);
@@ -100,4 +104,14 @@ string Generator::modelo()
     }
 
     return model;
+}
+
+void Generator::writeModelo()
+{
+    ofstream out(*this->fileName);
+    string model = this->modelo();
+
+    out << model;
+    out.close();
+    model.clear();
 }

@@ -1,4 +1,5 @@
 #include "../headers/Esfera.h"
+#include <iostream>
 
 using namespace std;
 
@@ -20,9 +21,10 @@ double Esfera::getZCoord(double x,double y)
     double r = this->radius;
     double arg1 = x*x;
     double arg2 = y*y;
-    double z = sqrt(r*r - arg1 - arg2);
+    double arg = r*r - arg1 - arg2;
+    double z = sqrt(arg);
 
-    return z;
+    return arg<0.0?0.0:z;
 }
 
 vector<PPoint3D>* Esfera::getYoZStackInterceptionPoints()
@@ -52,18 +54,20 @@ PPoint3D Esfera::rotatePoint_Yaxis(PPoint3D p,double angle) //angulo desde orige
     return new Point3D(x,p->y,z);
 }
 
-vector<vector<PPoint3D>*> Esfera::getSlicesPoints()
+vector<vector<PPoint3D>*> Esfera::getVerticalLinePoints()
 {
     vector<vector<PPoint3D>*> slicePoints;
     vector<PPoint3D>* sliceYoZ = getYoZStackInterceptionPoints();
     vector<PPoint3D>* slice;
     PPoint3D point;
     double sliceAngle = (2*M_PI)/(this->slices);
-    int nHalfSlices = (this->slices * 2) - 1;
+    int nVerticalLines = this->slices;
     
+    // primeira linha
     slicePoints.push_back(sliceYoZ);
 
-    for(int i=1; nHalfSlices>0 ; i++,nHalfSlices--)
+    // outras linhas
+    for(int i=1; nVerticalLines-1>0 ; i++,nVerticalLines--)
     {
         slice = new vector<PPoint3D>();
         slice->push_back(new Point3D((*sliceYoZ)[0])); // primeiro ponto nao sofre rotacao
@@ -76,10 +80,16 @@ vector<vector<PPoint3D>*> Esfera::getSlicesPoints()
         slicePoints.push_back(slice);
     }
 
+    // ultima linha=primeira
+    slice = new vector<PPoint3D>();
+    for(auto ppoint: *sliceYoZ)
+        slice->push_back(new Point3D(ppoint));
+    slicePoints.push_back(slice);
+
     return slicePoints;
 }
 
-vector<PTriangle>* Esfera::getSlicePieceTriangles(vector<PPoint3D>* s1,vector<PPoint3D>* s2)
+vector<PTriangle>* Esfera::getSliceTriangles(vector<PPoint3D>* s1,vector<PPoint3D>* s2)
 {
     vector<PTriangle>* triangles = new vector<PTriangle>();
     PTriangle triangle;
@@ -111,12 +121,12 @@ vector<PTriangle>* Esfera::getSlicePieceTriangles(vector<PPoint3D>* s1,vector<PP
 
 vector<vector<PTriangle>*> Esfera::getTriangles()
 {
-    vector<vector<PPoint3D>*> slicesPoints = this->getSlicesPoints();
+    vector<vector<PPoint3D>*> slicesPoints = this->getVerticalLinePoints();
     vector<vector<PTriangle>*> triangles;
     int size = slicesPoints.size();
 
     for(int i=0;i<size-1;i++) // -1 nao faz para ultima slize -> igual á primeira
-        triangles.push_back(getSlicePieceTriangles(slicesPoints[i],slicesPoints[i+1]));
+        triangles.push_back(getSliceTriangles(slicesPoints[i],slicesPoints[i+1]));
     
     // free slicesPoints
     for(auto slice: slicesPoints)

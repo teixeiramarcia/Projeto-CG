@@ -2,7 +2,8 @@
 #include <string>
 #include <vector>
 
-#define PATH "../Visualizator/xml/"
+//#define PATH "../Visualizator/xml/"
+#define PATH "./"
 
 class Generator
 {
@@ -15,4 +16,5 @@ class Generator
         Generator(int argc,char** argv);
         ~Generator();
         std::string modelo();
+        void writeModelo();
 };
