@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#define _USE_MATH_DEFINES
 #include <math.h>
 #include "./Point3D.h"
 #include "./Triangle.h"
