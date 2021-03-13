@@ -29,7 +29,7 @@ vector<PTriangle> Cone::desenhaCone(){
         float catopt = sin(angulo) * raio;
         float nextcatadj = cos(angulo + (2*M_PI/slices)) * raio;
         float nextcatopt = sin(angulo + (2*M_PI/slices)) * raio;
-        estrutura.push_back(new Triangle(0.0f, 0.0f, 0.0f, nextcatadj, 0.0f, nextcatopt, catadj, 0.0f, catopt));
+        estrutura.push_back(new Triangle(0.0f, 0.0f, 0.0f, catadj, 0.0f, catopt, nextcatadj, 0.0f, nextcatopt));
     }
 	//Face lateral
 	for(int i = 0; i < stacks; i++){
