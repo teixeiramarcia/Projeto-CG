@@ -21,9 +21,10 @@ using namespace tinyxml2;
 vector<tuple<double, double, double>> points;
 
 GLfloat x = 0.0f;
-GLfloat y = 1.0f;
+GLfloat y = 0.0f;
 GLfloat z = 0.0f;
 float alpha = 0.0f;
+int drawingType = GL_LINE;
 
 void changeSize(int w, int h) {
 
@@ -122,9 +123,11 @@ void renderScene() {
     glEnd();
 
     // put the geometric transformations here
-    glTranslatef(x, 0.0f, z);
+    glTranslatef(x, y, z);
     glRotatef(alpha, 0.0f, 1.0f, 0.0f);
-    glScalef(1.0f, y, 1.0f);
+    glScalef(1.0f, 1.0f, 1.0f);
+
+    glPolygonMode(GL_FRONT, drawingType);
 
     glBegin(GL_TRIANGLES);
     for(auto const& value : points) {
@@ -148,10 +151,10 @@ void keyboardCallback(unsigned char key_code, int _unused1, int _unused2) {
             break;
         //Subir ou descer (north e south)
         case 'n':
-            z += 0.1f;
+            y += 0.1f;
             break;
         case 's':
-            z -= 0.1f;
+            y -= 0.1f;
             break;
         //Esquerda ou direita (w e f)
         case 'w':
@@ -159,6 +162,18 @@ void keyboardCallback(unsigned char key_code, int _unused1, int _unused2) {
             break;
         case 'f':
             x += 0.1f;
+            break;
+        // Preencher a cor da figura
+        case 'c':
+            drawingType = GL_FILL;
+            break;
+        //Colocar a figura em linhas
+        case 'l':
+            drawingType = GL_LINE;
+            break;
+        //Colocar a figura em pontos
+        case 'p':
+            drawingType = GL_POINT;
             break;
         default:
             break;
