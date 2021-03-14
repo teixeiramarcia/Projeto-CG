@@ -112,7 +112,6 @@ string Figuras::box(double x,double y,double z,int divisions)
         float xAtual, yAtual, zAtual;
 
         //anotações, tendo como referência a representação habitual dos eixos: 
-        //tampa e base:
         for (int i = 0; i < divisions; i++) {
             float xAtual = (-x / 2) + i * (x / divisions);
             float xAtualSup = (-x / 2) + (i + 1) * (x / divisions);
