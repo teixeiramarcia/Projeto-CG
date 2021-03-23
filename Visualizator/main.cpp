@@ -1,11 +1,4 @@
 
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#else
-#include <GL/glut.h>
-#include <GL/gl.h>
-#endif
-
 #include <vector>
 #include <tuple>
 #include <iostream>
@@ -14,6 +7,13 @@
 #include <sstream>
 
 #include "tinyxml2.h"
+
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#include <GL/gl.h>
+#endif
 
 using namespace std;
 using namespace tinyxml2;

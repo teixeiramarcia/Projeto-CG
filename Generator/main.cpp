@@ -1,6 +1,4 @@
 #include <iostream>
-#include <fstream>
-#include <string>
 #include "./headers/Generator.h"
 
 int main(int argc,char** argv)
