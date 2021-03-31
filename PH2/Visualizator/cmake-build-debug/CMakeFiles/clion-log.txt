@@ -1,1 +1,6 @@
-CMakeLists.txt not found in /Users/marciateixeira/Desktop/CG/Projeto-CG/Visualizator Select CMakeLists.txt
+"/Users/marciateixeira/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/203.7717.62/CLion.app/Contents/bin/cmake/mac/bin/cmake" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/marciateixeira/Desktop/CG/Projeto-CG/PH2/Visualizator
+-- Found OpenGL: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/OpenGL.framework   
+-- Found GLUT: /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/GLUT.framework  
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/marciateixeira/Desktop/CG/Projeto-CG/PH2/Visualizator/cmake-build-debug

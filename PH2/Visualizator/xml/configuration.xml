@@ -1,6 +1,10 @@
 <scene>
-    <model file= "cone.3d" />
-    <!--<model file= "box.3d" />
-    <model file= "sphere.3d" />
-    <model file= "plane.3d" />-->
+    <group>
+        <models>
+            <model file= "cone.3d" />
+            <!--<model file= "box.3d" />
+            <model file= "sphere.3d" />
+            <model file= "plane.3d" />-->
+        </models>>
+    </group>
 </scene>

@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.9)
 project(visualizador)
 
 add_executable(visualizador
-    main.cpp tinyxml2.cpp
-)
+        main.cpp tinyxml2.cpp
+        )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
@@ -24,7 +24,7 @@ link_directories(${GLUT_LIBRARY_DIRS})
 add_definitions(${GLUT_DEFINITIONS})
 
 target_link_libraries(
-    visualizador
-    ${OPENGL_LIBRARIES}
-    ${GLUT_LIBRARY}
+        visualizador
+        ${OPENGL_LIBRARIES}
+        ${GLUT_LIBRARY}
 )

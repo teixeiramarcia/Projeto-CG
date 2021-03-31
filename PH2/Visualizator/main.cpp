@@ -18,7 +18,14 @@
 using namespace std;
 using namespace tinyxml2;
 
-vector<tuple<double, double, double>> points;
+//Global variables
+vector<tuple<float, float, float>> points;
+
+typedef struct states {
+    tuple<float, float, float> translate_state; //translates
+    tuple<float, float, float, float> rotate_state; //rotates
+    tuple<float, float, float> scale_state; //scales
+} *States;
 
 GLfloat x = 0.0f;
 GLfloat y = 0.0f;
@@ -26,36 +33,38 @@ GLfloat z = 0.0f;
 float alpha = 0.0f;
 int drawingType = GL_LINE;
 
+//-------------------
+
 void changeSize(int w, int h) {
 
-	// Prevent a divide by zero, when window is too short
-	// (you cant make a window with zero width).
-	if(h == 0) h = 1;
+    // Prevent a divide by zero, when window is too short
+    // (you cant make a window with zero width).
+    if(h == 0) h = 1;
 
-	// compute window's aspect ratio 
-	float ratio = w * 1.0 / h;
+    // compute window's aspect ratio
+    float ratio = w * 1.0 / h;
 
-	// Set the projection matrix as current
-	glMatrixMode(GL_PROJECTION);
-	// Load Identity Matrix
-	glLoadIdentity();
-	
-	// Set the viewport to be the entire window
-	glViewport(0, 0, w, h);
+    // Set the projection matrix as current
+    glMatrixMode(GL_PROJECTION);
+    // Load Identity Matrix
+    glLoadIdentity();
 
-	// Set perspective
-	gluPerspective(45.0f ,ratio, 1.0f ,1000.0f);
+    // Set the viewport to be the entire window
+    glViewport(0, 0, w, h);
 
-	// return to the model view matrix mode
-	glMatrixMode(GL_MODELVIEW);
+    // Set perspective
+    gluPerspective(45.0f ,ratio, 1.0f ,1000.0f);
+
+    // return to the model view matrix mode
+    glMatrixMode(GL_MODELVIEW);
 }
 
 void renderScene() {
-	// clear buffers
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // clear buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// set the camera
-	glLoadIdentity();
+    // set the camera
+    glLoadIdentity();
     gluLookAt(5.0,5.0,5.0,
               0.0,0.0,0.0,
               0.0f,1.0f,0.0f);
@@ -131,13 +140,13 @@ void renderScene() {
 
     glBegin(GL_TRIANGLES);
     for(auto const& value : points) {
-        glColor3f(rand() / double(RAND_MAX), rand() / double(RAND_MAX), rand() / double(RAND_MAX));
+        glColor3f(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX));
         glVertex3f(get<0>(value), get<1>(value), get<2>(value));
     }
     glEnd();
 
     // End of frame
-	glutSwapBuffers();
+    glutSwapBuffers();
 }
 
 void keyboardCallback(unsigned char key_code, int _unused1, int _unused2) {
@@ -149,29 +158,29 @@ void keyboardCallback(unsigned char key_code, int _unused1, int _unused2) {
         case 'e':
             alpha -= 22.5f;
             break;
-        //Subir ou descer (north e south)
+            //Subir ou descer (north e south)
         case 'n':
             y += 0.1f;
             break;
         case 's':
             y -= 0.1f;
             break;
-        //Esquerda ou direita (w e f)
+            //Esquerda ou direita (w e f)
         case 'w':
             x -= 0.1f;
             break;
         case 'f':
             x += 0.1f;
             break;
-        // Preencher a cor da figura
+            // Preencher a cor da figura
         case 'c':
             drawingType = GL_FILL;
             break;
-        //Colocar a figura em linhas
+            //Colocar a figura em linhas
         case 'l':
             drawingType = GL_LINE;
             break;
-        //Colocar a figura em pontos
+            //Colocar a figura em pontos
         case 'p':
             drawingType = GL_POINT;
             break;
@@ -208,7 +217,72 @@ void readModel(const char * filename) {
     file.close();
 }
 
-bool readModels(const char * filename) {
+States readTranslate(XMLElement* element, States state) {
+    float val_x = strtof(element->Attribute("X"), nullptr);
+    float val_y = strtof(element->Attribute("Y"), nullptr);
+    float val_z = strtof(element->Attribute("Z"), nullptr);
+
+    get<0>(state->translate_state) += val_x;
+    get<1>(state->translate_state) += val_y;
+    get<2>(state->translate_state) += val_z;
+
+    return state;
+}
+
+States readRotate(XMLElement* element, States state) {
+    float val_angle = strtof(element->Attribute("angle"), nullptr);
+    float val_x = strtof(element->Attribute("X"), nullptr);
+    float val_y = strtof(element->Attribute("Y"), nullptr);
+    float val_z = strtof(element->Attribute("Z"), nullptr);
+
+    get<0>(state->rotate_state) += val_angle;
+    get<1>(state->rotate_state) = val_x;
+    get<2>(state->rotate_state) = val_y;
+    get<3>(state->rotate_state) = val_z;
+
+    return state;
+}
+
+States readScale(XMLElement* element, States state) {
+    float val_x = strtof(element->Attribute("X"), nullptr);
+    float val_y = strtof(element->Attribute("Y"), nullptr);
+    float val_z = strtof(element->Attribute("Z"), nullptr);
+
+    get<0>(state->scale_state) += val_x;
+    get<1>(state->scale_state) += val_y;
+    get<2>(state->scale_state) += val_z;
+
+    return state;
+}
+
+States readGroups(XMLNode * group, States state) {
+    States currentState = state;
+    for(XMLNode * g = group->FirstChild(); g != nullptr; g = g->NextSibling()) {
+        const char * name = g->Value();
+        if(!strcmp(name, "models")) {
+            XMLElement * e = g->FirstChildElement("model");
+
+            while(e != nullptr) {
+                readModel(e->Attribute("file"));
+                e = e->NextSiblingElement("model");
+            }
+        } else if (!strcmp(name, "translate")) {
+            auto * e = (XMLElement*) g;
+            state = readTranslate(e, currentState);
+        } else if (!strcmp(name, "rotate")) {
+            auto * e = (XMLElement*) g;
+            state = readRotate(e, currentState);
+        } else if (!strcmp(name, "scale")) {
+            auto * e = (XMLElement*) g;
+            state = readScale(e, currentState);
+        } else if (!strcmp(name, "group")) {
+            state = readGroups(g, currentState);
+        }
+    }
+    return state;
+}
+
+bool readConfig(const char * filename) {
     XMLDocument document;
 
     XMLError result = document.LoadFile(filename);
@@ -219,12 +293,21 @@ bool readModels(const char * filename) {
 
     if (root == nullptr) return false;
 
-    XMLElement * element = root->FirstChildElement("model");
-    while(element != nullptr) {
-        readModel(element->Attribute("file"));
-        element = element->NextSiblingElement("model");
-    }
+    XMLElement * element = root->FirstChildElement("group");
 
+    States state;
+    {
+        state = (States) malloc(sizeof(states));
+        state->translate_state = make_tuple(0.0, 0.0, 0.0);
+        state->rotate_state = make_tuple(0.0, 0.0, 0.0, 0.0);
+        state->scale_state = make_tuple(0.0, 0.0, 0.0);
+
+        while (element != nullptr) {
+            readGroups(element, state);
+            element = (XMLElement *) element->NextSibling();
+        }
+    }
+    free(state);
     return true;
 }
 
@@ -242,9 +325,9 @@ void glutSetup(int argc, char **argv) {
     glutKeyboardFunc(keyboardCallback);
 
     // OpenGL settings
-	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_CULL_FACE);
-	glClearColor(0.0f,0.0f,0.0f,0.0f);
+    glEnable(GL_DEPTH_TEST);
+    //glEnable(GL_CULL_FACE);
+    glClearColor(0.0f,0.0f,0.0f,0.0f);
 }
 
 int main(int argc, char **argv) {
@@ -253,14 +336,14 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    if (!readModels(argv[1])) {
+    if (!readConfig(argv[1])) {
         return 3;
     }
 
     glutSetup(argc, argv);
 
     // enter GLUT's main loop
-	glutMainLoop();
-	
-	return 1;
+    glutMainLoop();
+
+    return 1;
 }
