@@ -19,13 +19,21 @@ using namespace std;
 using namespace tinyxml2;
 
 //Global variables
-vector<tuple<float, float, float>> points;
+vector<vector<tuple<float, float, float>>> figures;
+
+vector<vector<char>> ordem;
 
 typedef struct states {
-    tuple<float, float, float> translate_state; //translates
-    tuple<float, float, float, float> rotate_state; //rotates
-    tuple<float, float, float> scale_state; //scales
+    vector<tuple<float, float, float>> translate_state; //translates
+    vector<tuple<float, float, float, float>> rotate_state; //rotates
+    vector<tuple<float, float, float>> scale_state; //scales
 } *States;
+
+vector<tuple<float, float, float>> translate_state; //translates
+vector<tuple<float, float, float, float>> rotate_state; //rotates
+vector<tuple<float, float, float>> scale_state; //scales
+
+int rCounter = 0, tCounter = 0, sCounter = 0;
 
 GLfloat x = 0.0f;
 GLfloat y = 0.0f;
@@ -57,6 +65,37 @@ void changeSize(int w, int h) {
 
     // return to the model view matrix mode
     glMatrixMode(GL_MODELVIEW);
+}
+
+int drawScene(vector<tuple<float, float, float>> point, int i){
+    int result = 0;
+    for(int j = 0; j<ordem[i].size(); j++){
+        switch (ordem[i][j]) {
+            case 't':
+                glTranslatef(get<0>(translate_state[tCounter]), get<1>(translate_state[tCounter]), get<2>(translate_state[tCounter]));
+                tCounter++;
+                break;
+            case 'r':
+                glRotatef(get<0>(rotate_state[rCounter]), get<1>(rotate_state[rCounter]), get<2>(rotate_state[rCounter]), get<3>(rotate_state[rCounter]));
+                rCounter++;
+                break;
+            case 's':
+                glScalef(get<0>(scale_state[sCounter]), get<1>(scale_state[sCounter]), get<2>(scale_state[sCounter]));
+                sCounter++;
+                break;
+            case 'm':
+                for (auto const& value : point) {
+                    glColor3f(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX));
+                    glVertex3f(get<0>(value), get<1>(value), get<2>(value));
+                }
+                break;
+            case 'g':
+                result++;
+                result += drawScene(figures[i+1], i+1);
+                break;
+        }
+    }
+    return result;
 }
 
 void renderScene() {
@@ -139,10 +178,12 @@ void renderScene() {
     glPolygonMode(GL_FRONT_AND_BACK, drawingType);
 
     glBegin(GL_TRIANGLES);
-    for(auto const& value : points) {
-        glColor3f(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX));
-        glVertex3f(get<0>(value), get<1>(value), get<2>(value));
+
+
+    for (int i = 0; i<figures.size(); i++) {
+        i += drawScene(figures[i], i);
     }
+
     glEnd();
 
     // End of frame
@@ -205,14 +246,16 @@ vector<string> splitter(string& str, char delimiter) {
 }
 
 void readModel(const char * filename) {
+    vector<tuple<float, float, float>> points;
     ifstream file(filename);
     if (file.is_open()) {
         string line;
         getline(file, line);
-        while(getline(file, line)) {
+        while (getline(file, line)) {
             vector<string> s = splitter(line, ' ');
-            points.emplace_back(make_tuple(stod(s.at(0)), stod(s.at(1)), stod(s.at(2))));
+            points.emplace_back(make_tuple(stof(s.at(0)), stof(s.at(1)), stof(s.at(2))));
         }
+        figures.push_back(points);
     }
     file.close();
 }
@@ -222,9 +265,7 @@ States readTranslate(XMLElement* element, States state) {
     float val_y = strtof(element->Attribute("Y"), nullptr);
     float val_z = strtof(element->Attribute("Z"), nullptr);
 
-    get<0>(state->translate_state) += val_x;
-    get<1>(state->translate_state) += val_y;
-    get<2>(state->translate_state) += val_z;
+    state->translate_state.emplace_back(val_x, val_y, val_z);
 
     return state;
 }
@@ -235,10 +276,7 @@ States readRotate(XMLElement* element, States state) {
     float val_y = strtof(element->Attribute("Y"), nullptr);
     float val_z = strtof(element->Attribute("Z"), nullptr);
 
-    get<0>(state->rotate_state) += val_angle;
-    get<1>(state->rotate_state) = val_x;
-    get<2>(state->rotate_state) = val_y;
-    get<3>(state->rotate_state) = val_z;
+    state->rotate_state.emplace_back(val_angle, val_x, val_y, val_z);
 
     return state;
 }
@@ -248,37 +286,47 @@ States readScale(XMLElement* element, States state) {
     float val_y = strtof(element->Attribute("Y"), nullptr);
     float val_z = strtof(element->Attribute("Z"), nullptr);
 
-    get<0>(state->scale_state) += val_x;
-    get<1>(state->scale_state) += val_y;
-    get<2>(state->scale_state) += val_z;
+    state->scale_state.emplace_back(val_x, val_y, val_z);
 
     return state;
 }
 
 States readGroups(XMLNode * group, States state) {
     States currentState = state;
-    for(XMLNode * g = group->FirstChild(); g != nullptr; g = g->NextSibling()) {
+    vector<char> ordemFile;
+    for (XMLNode * g = group->FirstChild(); g != nullptr; g = g->NextSibling()) {
         const char * name = g->Value();
-        if(!strcmp(name, "models")) {
+        if (!strcmp(name, "models")) {
             XMLElement * e = g->FirstChildElement("model");
+            ordemFile.push_back('m');
 
-            while(e != nullptr) {
+            while (e != nullptr) {
+                for (int i=0; i<state->translate_state.size(); i++) {
+                    translate_state[i] = state->translate_state[i];
+                    rotate_state[i] = state->rotate_state[i];
+                    scale_state[i] = state->scale_state[i];
+                }
                 readModel(e->Attribute("file"));
                 e = e->NextSiblingElement("model");
             }
         } else if (!strcmp(name, "translate")) {
             auto * e = (XMLElement*) g;
+            ordemFile.push_back('t');
             state = readTranslate(e, currentState);
         } else if (!strcmp(name, "rotate")) {
             auto * e = (XMLElement*) g;
+            ordemFile.push_back('r');
             state = readRotate(e, currentState);
         } else if (!strcmp(name, "scale")) {
             auto * e = (XMLElement*) g;
+            ordemFile.push_back('s');
             state = readScale(e, currentState);
         } else if (!strcmp(name, "group")) {
+            ordemFile.push_back('g');
             state = readGroups(g, currentState);
         }
     }
+    ordem.push_back(ordemFile);
     return state;
 }
 
@@ -298,9 +346,6 @@ bool readConfig(const char * filename) {
     States state;
     {
         state = (States) malloc(sizeof(states));
-        state->translate_state = make_tuple(0.0, 0.0, 0.0);
-        state->rotate_state = make_tuple(0.0, 0.0, 0.0, 0.0);
-        state->scale_state = make_tuple(0.0, 0.0, 0.0);
 
         while (element != nullptr) {
             readGroups(element, state);
@@ -332,7 +377,7 @@ void glutSetup(int argc, char **argv) {
 
 int main(int argc, char **argv) {
     if (argc < 2) {
-        cout << "No model file provided." << endl;
+        cout << "No scene file provided." << endl;
         return 2;
     }
 
