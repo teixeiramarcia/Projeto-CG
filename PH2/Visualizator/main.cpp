@@ -17,6 +17,18 @@
 using namespace std;
 using namespace tinyxml2;
 
+GLfloat x = 0.0f;
+GLfloat y = 0.0f;
+GLfloat z = 0.0f;
+float alpha = 0.0f;
+int drawingType = GL_LINE;
+
+float alfa = 1.0f, beta = 0.0f, radius = 5.0f;
+float camX, camY, camZ;
+
+struct group;
+void drawGroup(struct group*);
+
 typedef struct point {
     float x;
     float y;
@@ -38,11 +50,11 @@ typedef struct action {
     Point scale{};
     Rotate rotate{};
     Model model{};
+    group * group{};
 } *Action;
 
 typedef struct group {
     vector<Action> actions;
-    vector<group *> groups;
 } *Group;
 
 typedef struct config {
@@ -52,6 +64,12 @@ typedef struct config {
 Config config;
 
 //-------------------
+
+void spherical2Cartesian() {
+    camX = radius * cos(beta) * sin(alfa);
+    camY = radius * sin(beta);
+    camZ = radius * cos(beta) * cos(alfa);
+}
 
 void changeSize(int w, int h) {
 
@@ -107,20 +125,19 @@ void drawAction(Action action) {
         drawRotate(action->rotate);
     } else if (!strcmp(action->name, "scale")) {
         drawScale(action->scale);
+    } else if (!strcmp(action->name, "group")) {
+        drawGroup(action->group);
     }
 }
 
-void drawGroup(Group group) {
+void drawGroup(struct group* group) {
     for(Action action : group->actions) {
         drawAction(action);
-    }
-
-    for(Group subgroup : group->groups) {
-        drawGroup(subgroup);
     }
 }
 
 void drawScene(){
+    glPolygonMode(GL_FRONT_AND_BACK, drawingType);
     for(Group group : config->groups) {
         glPushMatrix();
         drawGroup(group);
@@ -129,9 +146,6 @@ void drawScene(){
 }
 
 void renderScene() {
-    int camX = 0;
-    int camY = 0;
-    int camZ = 12;
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -139,7 +153,72 @@ void renderScene() {
     glLoadIdentity();
     gluLookAt(camX, camY, camZ, 0.0, 0.0, 0.0, 0.0f, 1.0f, 0.0f);
 
-    
+    glRotatef(x, 1.0, 0.0, 0.0);
+    glRotatef(y, 0.0, 1.0, 0.0);
+    glRotatef(z, 0.0, 0.0, 1.0);
+
+    /* Axis drawing */
+    // X negative axis in dotted Red
+    glPushAttrib(GL_ENABLE_BIT);
+    glLineStipple(4, 0xAAAA);
+    glEnable(GL_LINE_STIPPLE);
+    glBegin(GL_LINES);
+    glColor3f(1.0f, 0.0f, 0.0f); //color
+
+    glVertex3f(-100.0f, 0.0f, 0.0f);
+    glVertex3f( 0.0f, 0.0f, 0.0f);
+    glEnd();
+    glPopAttrib();
+
+    // Y negative axis in dotted Green
+    glPushAttrib(GL_ENABLE_BIT);
+    glLineStipple(4, 0xAAAA);
+    glEnable(GL_LINE_STIPPLE);
+    glBegin(GL_LINES);
+    glColor3f(0.0f, 1.0f, 0.0f); //color
+
+    glVertex3f(0.0f, -100.0f, 0.0f);
+    glVertex3f(0.0f, 0.0f, 0.0f);
+    glEnd();
+    glPopAttrib();
+
+    // Z negative axis in dotted Blue
+    glPushAttrib(GL_ENABLE_BIT);
+
+    glLineStipple(4, 0xAAAA);
+    glEnable(GL_LINE_STIPPLE);
+    glBegin(GL_LINES);
+    glColor3f(0.0f, 0.0f, 1.0f);
+    glVertex3f(0.0f, 0.0f, -100.0f);
+    glVertex3f(0.0f, 0.0f,  0.0f);
+    glEnd();
+    glPopAttrib();
+
+    glBegin(GL_LINES);
+    // X positive axis in red
+    glColor3f(1.0f, 0.0f, 0.0f); //color
+
+    glVertex3f(0.0f, 0.0f, 0.0f);
+    glVertex3f( 100.0f, 0.0f, 0.0f);
+
+    // Y positive axis in Green
+    glColor3f(0.0f, 1.0f, 0.0f); //color
+
+    glVertex3f(0.0f, 0.0f, 0.0f);
+    glVertex3f(0.0f, 100.0f, 0.0f);
+
+    // Z positive axis in Blue
+    glColor3f(0.0f, 0.0f, 1.0f); //color
+
+    glVertex3f(0.0f, 0.0f, 0.0f);
+    glVertex3f(0.0f, 0.0f,  100.0f);
+    glEnd();
+
+    // put the geometric transformations here
+    glTranslatef(x, y, z);
+    glRotatef(alpha, 0.0f, 1.0f, 0.0f);
+    glScalef(1.0f, 1.0f, 1.0f);
+
     drawScene();
 
     // End of frame
@@ -246,7 +325,10 @@ Group readGroups(XMLNode * node) {
             group->actions.push_back(readScale(e));
         } else if (!strcmp(name, "group")) {
             Group subgroup = readGroups(g);
-            group->groups.push_back(subgroup);
+            auto action = new struct action();
+            action->name = "group";
+            action->group = subgroup;
+            group->actions.push_back(action);
         }
     }
 
@@ -272,6 +354,87 @@ bool readConfig(const char * filename) {
     return true;
 }
 
+void keyboardCallback(unsigned char key_code, int _unused1, int _unused2) {
+    switch (key_code) {
+        //Rodar a figura (direita e esquerda)
+        case 'd':
+            alpha += 22.5f;
+            break;
+        case 'e':
+            alpha -= 22.5f;
+            break;
+            //Subir ou descer (north e south)
+        case 'n':
+            y += 0.1f;
+            break;
+        case 's':
+            y -= 0.1f;
+            break;
+            //Esquerda ou direita (w e f)
+        case 'w':
+            x -= 0.1f;
+            break;
+        case 'f':
+            x += 0.1f;
+            break;
+            // Preencher a cor da figura
+        case 'c':
+            drawingType = GL_FILL;
+            break;
+            //Colocar a figura em linhas
+        case 'l':
+            drawingType = GL_LINE;
+            break;
+            //Colocar a figura em pontos
+        case 'p':
+            drawingType = GL_POINT;
+            break;
+        default:
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+// write function to process keyboard events
+void processSpecialKeys(int key, int xx, int yy) { //FIXME: not working
+    switch (key) {
+        case GLUT_KEY_RIGHT:
+            alfa -= 0.1;
+            break;
+
+        case GLUT_KEY_LEFT:
+            alfa += 0.1;
+            break;
+
+        case GLUT_KEY_UP:
+            beta += 0.1f;
+            if (beta > 1.5f)
+                beta = 1.5f;
+            break;
+
+        case GLUT_KEY_DOWN:
+            beta -= 0.1f;
+            if (beta < -1.5f)
+                beta = -1.5f;
+            break;
+
+        case GLUT_KEY_PAGE_DOWN:
+            radius -= 0.1f;
+            if (radius < 0.1f)
+                radius = 0.1f;
+            break;
+
+        case GLUT_KEY_PAGE_UP:
+            radius += 0.1f;
+            break;
+        default:
+            break;
+    }
+    spherical2Cartesian();
+    glutPostRedisplay();
+}
+
 void glutSetup(int argc, char **argv) {
     // put GLUT init here
     glutInit(&argc, argv);
@@ -284,10 +447,15 @@ void glutSetup(int argc, char **argv) {
     glutReshapeFunc(changeSize);
     glutIdleFunc(renderScene);
 
+    // put here the registration of the keyboard callbacks
+    glutKeyboardFunc(keyboardCallback);
+    glutSpecialFunc(processSpecialKeys);
+
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE);
     glClearColor(0.0f,0.0f,0.0f,0.0f);
+    spherical2Cartesian();
 }
 
 int main(int argc, char **argv) {
