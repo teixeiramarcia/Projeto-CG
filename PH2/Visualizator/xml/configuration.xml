@@ -3,7 +3,7 @@
     <group>
         <scale X='4' Y='4' Z='4'/>
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='1' g='0.686' b='0' />
         </models>
     </group>
     <!-- Mercúrio -->
@@ -11,138 +11,138 @@
         <translate X='6' Y='0' Z='2' />
         <scale X='0.5' Y='0.5' Z='0.5'/>
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0.702' g='0.412' b='0.227' />
         </models>
     </group>
     <!-- Vénus -->
     <group>
-        <translate X='8' Y='0' Z='2' />
+        <translate X='-8' Y='0' Z='5' />
         <scale X='0.7' Y='0.7' Z='0.7'/>
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='1' g='0.373' b='0' />
         </models>
     </group>
     <!-- Terra -->
     <group>
-        <translate X='10.5' Y='0' Z='2' />
+        <translate X='10.5' Y='0' Z='1' />
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0' g='0.765' b='0.106' />
         </models>
         <group>
             <translate X='0.5' Y='0' Z='1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
     </group>
     <!-- Marte -->
     <group>
-        <translate X='12.8' Y='0' Z='2' />
+        <translate X='-12.8' Y='0' Z='-6' />
         <scale X='0.6' Y='0.6' Z='0.6' />
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0.718' g='0.118' b='0' />
         </models>
         <group>
             <translate X='0.5' Y='0' Z='1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
         <group>
-            <translate X='1' Y='0' Z='-2' />
+            <translate X='0.5' Y='0' Z='-1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
     </group>
     <!-- Júpiter -->
     <group>
-        <translate X='15.6' Y='0' Z='2' />
+        <translate X='-15.6' Y='0' Z='6.5' />
         <scale X='1.6' Y='1.6' Z='1.6' />
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0.498' g='0.333' b='0.263' />
         </models>
         <group>
             <translate X='0.5' Y='0' Z='1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
         <group>
-            <translate X='1' Y='0' Z='-2' />
+            <translate X='0.5' Y='0' Z='-1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
     </group>
     <!-- Saturno -->
     <group>
-        <translate X='19.6' Y='0' Z='2' />
+        <translate X='19.6' Y='0' Z='-2' />
         <scale X='1.2' Y='1.2' Z='1.2' />
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0.514' g='0.463' b='0.408' />
         </models>
         <group>
             <translate X='0.5' Y='0' Z='1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
         <group>
-            <translate X='1' Y='0' Z='-2' />
+            <translate X='0.5' Y='0' Z='-1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
     </group>
     <!-- Urano -->
     <group>
-        <translate X='22.5' Y='0' Z='2' />
+        <translate X='22.5' Y='0' Z='-4' />
         <scale X='0.6' Y='0.6' Z='0.6' />
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0.514' g='0.847' b='0.953' />
         </models>
         <group>
             <translate X='0.5' Y='0' Z='1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
         <group>
-            <translate X='1' Y='0' Z='-2' />
+            <translate X='0.5' Y='0' Z='-1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
     </group>
     <!-- Neptuno -->
     <group>
-        <translate X='24.6' Y='0' Z='2' />
+        <translate X='-24.6' Y='0' Z='7' />
         <scale X='0.55' Y='0.55' Z='0.55' />
         <models>
-            <model file='sphere.3d' />
+            <model file='sphere.3d' r='0.220' g='0.325' b='0.945' />
         </models>
         <group>
             <translate X='0.5' Y='0' Z='1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
         <group>  
-            <translate X='1' Y='0' Z='-2' />
+            <translate X='0.5' Y='0' Z='-1.6' />
             <scale X='0.2' Y='0.2' Z='0.2' />
             <models>
-                <model file='sphere.3d' />
+                <model file='sphere.3d' r='0.863' g='0.863' b='0.863' />
             </models>
         </group>
     </group>

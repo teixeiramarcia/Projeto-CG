@@ -43,8 +43,15 @@ typedef struct rotate {
     Point point;
 } *Rotate;
 
+typedef struct color {
+    float red;
+    float green;
+    float blue;
+} *Color;
+
 typedef struct model {
     vector<Point> points;
+    Color color{};
 } *Model;
 
 typedef struct action {
@@ -100,8 +107,8 @@ void changeSize(int w, int h) {
 
 void drawModel(Model model) {
     glBegin(GL_TRIANGLES);
+    glColor3f(model->color->red, model->color->green, model->color->blue);
     for (Point point : model->points) {
-        glColor3f(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX));
         glVertex3f(point->x, point->y, point->z);
     }
     glEnd();
@@ -134,17 +141,17 @@ void drawAction(Action action) {
 }
 
 void drawGroup(struct group *group) {
+    glPushMatrix();
     for (Action action : group->actions) {
         drawAction(action);
     }
+    glPopMatrix();
 }
 
 void drawScene() {
     glPolygonMode(GL_FRONT_AND_BACK, drawingType);
     for (Group group : config->groups) {
-        glPushMatrix();
         drawGroup(group);
-        glPopMatrix();
     }
 }
 
@@ -159,6 +166,11 @@ void renderScene() {
     glRotatef(x, 1.0, 0.0, 0.0);
     glRotatef(y, 0.0, 1.0, 0.0);
     glRotatef(z, 0.0, 0.0, 1.0);
+
+    // put the geometric transformations here
+    glTranslatef(x, y, z);
+    glRotatef(alpha, 0.0f, 1.0f, 0.0f);
+    glScalef(1.0f, 1.0f, 1.0f);
 
     /* Axis drawing */
     // X negative axis in dotted Red
@@ -217,11 +229,6 @@ void renderScene() {
     glVertex3f(0.0f, 0.0f, 100.0f);
     glEnd();
 
-    // put the geometric transformations here
-    glTranslatef(x, y, z);
-    glRotatef(alpha, 0.0f, 1.0f, 0.0f);
-    glScalef(1.0f, 1.0f, 1.0f);
-
     drawScene();
 
     // End of frame
@@ -240,14 +247,26 @@ vector<string> splitter(string &str, char delimiter) {
     return splittedStrs;
 }
 
+const char* getValueOrDefault(const char* r) {
+    return r != nullptr ? r : "0";
+}
+
+const char* getOptionalAttribute(XMLElement *e, const char* attribute) {
+    return getValueOrDefault(e->Attribute(attribute));
+}
+
+float getFloatAttribute(XMLElement *e, const char* attribute) {
+    return strtof(getOptionalAttribute(e, attribute), nullptr);
+}
+
 Action readTranslate(XMLElement *e) {
     auto action = new struct action();
     action->name = "translate";
     action->translate = new struct point();
 
-    action->translate->x = strtof(e->Attribute("X"), nullptr);
-    action->translate->y = strtof(e->Attribute("Y"), nullptr);
-    action->translate->z = strtof(e->Attribute("Z"), nullptr);
+    action->translate->x = getFloatAttribute(e, "X");
+    action->translate->y = getFloatAttribute(e, "Y");
+    action->translate->z = getFloatAttribute(e, "Z");
 
     return action;
 }
@@ -257,10 +276,10 @@ Action readRotate(XMLElement *e) {
     action->name = "rotate";
     action->rotate = new struct rotate();
 
-    action->rotate->angle = strtof(e->Attribute("angle"), nullptr);
-    action->rotate->point->x = strtof(e->Attribute("X"), nullptr);
-    action->rotate->point->y = strtof(e->Attribute("Y"), nullptr);
-    action->rotate->point->z = strtof(e->Attribute("Z"), nullptr);
+    action->rotate->angle = getFloatAttribute(e, "angle");
+    action->rotate->point->x = getFloatAttribute(e, "X");
+    action->rotate->point->y = getFloatAttribute(e, "Y");
+    action->rotate->point->z = getFloatAttribute(e, "Z");
 
     return action;
 }
@@ -270,18 +289,22 @@ Action readScale(XMLElement *e) {
     action->name = "scale";
     action->scale = new struct point();
 
-    action->scale->x = strtof(e->Attribute("X"), nullptr);
-    action->scale->y = strtof(e->Attribute("Y"), nullptr);
-    action->scale->z = strtof(e->Attribute("Z"), nullptr);
+    action->scale->x = getFloatAttribute(e, "X");
+    action->scale->y = getFloatAttribute(e, "Y");
+    action->scale->z = getFloatAttribute(e, "Z");
 
     return action;
 }
 
-Action readModel(XMLElement *e) {
-    auto action = new struct action();
-    action->name = "model";
-    action->model = new struct model();
+void readColor(XMLElement *e, Action action) {
+    action->model->color = new struct color();
 
+    action->model->color->red = getFloatAttribute(e, "r");
+    action->model->color->green = getFloatAttribute(e, "g");
+    action->model->color->blue = getFloatAttribute(e, "b");
+}
+
+void readFile(XMLElement *e, Action action) {
     ifstream file(e->Attribute("file"));
     if (file.is_open()) {
         string line;
@@ -297,6 +320,15 @@ Action readModel(XMLElement *e) {
         }
     }
     file.close();
+}
+
+Action readModel(XMLElement *e) {
+    auto action = new struct action();
+    action->name = "model";
+    action->model = new struct model();
+
+    readFile(e, action);
+    readColor(e, action);
 
     return action;
 }
