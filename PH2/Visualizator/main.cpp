@@ -25,7 +25,7 @@ GLfloat z = 0.0f;
 float alpha = 0.0f;
 int drawingType = GL_LINE;
 
-float alfa = 1.0f, beta = 0.0f, radius = 30.0f;
+float alfa = 1.0f, beta = 0.0f, radius = 60.0f;
 float camX, camY, camZ;
 
 struct group;
@@ -180,7 +180,7 @@ void renderScene() {
     glBegin(GL_LINES);
     glColor3f(1.0f, 0.0f, 0.0f); //color
 
-    glVertex3f(-100.0f, 0.0f, 0.0f);
+    glVertex3f(-1000.0f, 0.0f, 0.0f);
     glVertex3f(0.0f, 0.0f, 0.0f);
     glEnd();
     glPopAttrib();
@@ -192,7 +192,7 @@ void renderScene() {
     glBegin(GL_LINES);
     glColor3f(0.0f, 1.0f, 0.0f); //color
 
-    glVertex3f(0.0f, -100.0f, 0.0f);
+    glVertex3f(0.0f, -1000.0f, 0.0f);
     glVertex3f(0.0f, 0.0f, 0.0f);
     glEnd();
     glPopAttrib();
@@ -204,7 +204,7 @@ void renderScene() {
     glEnable(GL_LINE_STIPPLE);
     glBegin(GL_LINES);
     glColor3f(0.0f, 0.0f, 1.0f);
-    glVertex3f(0.0f, 0.0f, -100.0f);
+    glVertex3f(0.0f, 0.0f, -1000.0f);
     glVertex3f(0.0f, 0.0f, 0.0f);
     glEnd();
     glPopAttrib();
@@ -214,19 +214,19 @@ void renderScene() {
     glColor3f(1.0f, 0.0f, 0.0f); //color
 
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(100.0f, 0.0f, 0.0f);
+    glVertex3f(1000.0f, 0.0f, 0.0f);
 
     // Y positive axis in Green
     glColor3f(0.0f, 1.0f, 0.0f); //color
 
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 100.0f, 0.0f);
+    glVertex3f(0.0f, 1000.0f, 0.0f);
 
     // Z positive axis in Blue
     glColor3f(0.0f, 0.0f, 1.0f); //color
 
     glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f, 100.0f);
+    glVertex3f(0.0f, 0.0f, 1000.0f);
     glEnd();
 
     drawScene();
