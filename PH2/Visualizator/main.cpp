@@ -299,9 +299,9 @@ Action readScale(XMLElement *e) {
 void readColor(XMLElement *e, Action action) {
     action->model->color = new struct color();
 
-    action->model->color->red = getFloatAttribute(e, "r");
-    action->model->color->green = getFloatAttribute(e, "g");
-    action->model->color->blue = getFloatAttribute(e, "b");
+    action->model->color->red = getFloatAttribute(e, "R");
+    action->model->color->green = getFloatAttribute(e, "G");
+    action->model->color->blue = getFloatAttribute(e, "B");
 }
 
 void readFile(XMLElement *e, Action action) {
