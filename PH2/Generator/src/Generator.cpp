@@ -18,7 +18,7 @@ Generator::Generator(int argc,char** argv)
     
     // figura e/ou numero argumentos invalidos
     if(!(*this->figura=="plane" && argc==4 || *this->figura=="box" && argc==7 || *this->figura=="sphere" && argc==6
-        || *this->figura=="cone" && argc==7))
+        || *this->figura=="cone" && argc==7 || *this->figura=="ring" && argc==7))
     {
         cerr << "Invalid figure or number of arguments\n";
         exit(1);
@@ -33,6 +33,8 @@ Generator::Generator(int argc,char** argv)
         nArgsFig = 4;
     else if(*this->figura=="sphere")
         nArgsFig = 3;
+    else if(*this->figura=="cone")
+        nArgsFig = 4;
     else
         nArgsFig = 4;
     
@@ -93,16 +95,24 @@ string Generator::modelo()
         
         model = Figuras::esfera(radius,slices,stacks);
     }
-    else
+    else if(*this->figura=="cone")
     {
-        double radius = this->argsFig[0];
-        double height = this->argsFig[1];
+        float radius = this->argsFig[0];
+        float height = this->argsFig[1];
         int slices = this->argsFig[2];
         int stacks = this->argsFig[3];
 
         model = Figuras::cone(radius,height,slices,stacks);
     }
+    else
+    {
+        float radius = this->argsFig[0];
+        int slices = this->argsFig[1];
+        int stacks = this->argsFig[2];
+        float outerR = this->argsFig[3];
 
+        model = Figuras::anel(radius,slices,stacks,outerR);
+    }
     return model;
 }
 

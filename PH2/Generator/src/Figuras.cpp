@@ -1,6 +1,7 @@
 #include "../headers/Figuras.h"
 #include "../headers/Esfera.h"
 #include "../headers/Cone.h"
+#include "../headers/Anel.h"
 
 using namespace std;
 
@@ -8,9 +9,9 @@ string Figuras::plane(double x)
 {
     string s;
     float h = 0.0f;          //todos os pontos terao y == 0
-    float lado = x / 2;      //uma vez que o plano está centrado na origem
+    float lado = x / 2;      //uma vez que o plano estï¿½ centrado na origem
 
-    //escrever número de pontos no ficheiro:
+    //escrever nï¿½mero de pontos no ficheiro:
     s.append(to_string(6) + "\n");      //todos os planos sao compostos por 6 pontos (2 triangulos)
 
     s.append(to_string(lado) + " " + to_string(h) + " " + to_string(lado) + "\n");
@@ -32,15 +33,15 @@ string Figuras::box(double x,double y,double z,int divisions)
     int nTriangulos, nPontos = -1;
     
     if (divisions > 1) {
-        //se existem divisões (é opcional):
-        nTriangulos = (6 * divisions^2) * 2;   //número de triângulos
-        nPontos = nTriangulos * 3;    //número de pontos
+        //se existem divisï¿½es (ï¿½ opcional):
+        nTriangulos = (6 * divisions^2) * 2;   //nï¿½mero de triï¿½ngulos
+        nPontos = nTriangulos * 3;    //nï¿½mero de pontos
     }
     else {
-        //caso não tenham sido pedidas divisões:
+        //caso nï¿½o tenham sido pedidas divisï¿½es:
         nPontos = 36;
     }
-    //escrever no ficheiro o número de pontos:
+    //escrever no ficheiro o nï¿½mero de pontos:
     s.append(to_string(nPontos) + "\n"); 
 
     //uma vez que a caixa vai estar centrada na origem:
@@ -48,10 +49,10 @@ string Figuras::box(double x,double y,double z,int divisions)
     float xLado = x / 2;
     float zLado = z / 2;
     
-    //caso não existam divisões (divisions = 0 ou 1):
+    //caso nï¿½o existam divisï¿½es (divisions = 0 ou 1):
     if (divisions <= 1) {
-        //anotações, tendo como referência a representação habitual dos eixos: 
-        //calculo e escrita dos pontos dos triângulos da tampa (ordem mão direita, y fixo):
+        //anotaï¿½ï¿½es, tendo como referï¿½ncia a representaï¿½ï¿½o habitual dos eixos: 
+        //calculo e escrita dos pontos dos triï¿½ngulos da tampa (ordem mï¿½o direita, y fixo):
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
@@ -60,7 +61,7 @@ string Figuras::box(double x,double y,double z,int divisions)
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
 
-        //calculo e escrita dos pontos dos triângulos da base (ordem mão esquerda):
+        //calculo e escrita dos pontos dos triï¿½ngulos da base (ordem mï¿½o esquerda):
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
@@ -70,8 +71,8 @@ string Figuras::box(double x,double y,double z,int divisions)
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
 
 
-        //calculo e escrita dos pontos dos triângulos das faces laterais:
-        //1ª face ("frente", z fixo:
+        //calculo e escrita dos pontos dos triï¿½ngulos das faces laterais:
+        //1ï¿½ face ("frente", z fixo:
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
@@ -80,7 +81,7 @@ string Figuras::box(double x,double y,double z,int divisions)
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
 
-        //2ª fase ("traseira", z fixo):
+        //2ï¿½ fase ("traseira", z fixo):
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
@@ -89,7 +90,7 @@ string Figuras::box(double x,double y,double z,int divisions)
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
 
-        //3ª fase ("direita", x fixo):
+        //3ï¿½ fase ("direita", x fixo):
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
@@ -98,7 +99,7 @@ string Figuras::box(double x,double y,double z,int divisions)
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
 
-        //4ª fase ("esquerda", x fixo):
+        //4ï¿½ fase ("esquerda", x fixo):
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(-zLado) + "\n");
         s.append(to_string(-xLado) + " " + to_string(-hMax) + " " + to_string(zLado) + "\n");
@@ -108,15 +109,15 @@ string Figuras::box(double x,double y,double z,int divisions)
         s.append(to_string(-xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
     }
     else {
-        //caso tenham sido requeridas divisões:
+        //caso tenham sido requeridas divisï¿½es:
         float xAtual, yAtual, zAtual;
 
-        //anotações, tendo como referência a representação habitual dos eixos: 
+        //anotaï¿½ï¿½es, tendo como referï¿½ncia a representaï¿½ï¿½o habitual dos eixos: 
         for (int i = 0; i < divisions; i++) {
             float xAtual = (-x / 2) + i * (x / divisions);
             float xAtualSup = (-x / 2) + (i + 1) * (x / divisions);
-            float zAtualEsqDir = (-z / 2) + i * (z / divisions);   //no caso da face esquerda e direita, a variação em z, necessita de estar
-            float zAtualSupEsqDir = (-z / 2) + (i + 1) * (z / divisions); //num ciclo diferente da variação em y, que se encontra no ciclo mais "interior"
+            float zAtualEsqDir = (-z / 2) + i * (z / divisions);   //no caso da face esquerda e direita, a variaï¿½ï¿½o em z, necessita de estar
+            float zAtualSupEsqDir = (-z / 2) + (i + 1) * (z / divisions); //num ciclo diferente da variaï¿½ï¿½o em y, que se encontra no ciclo mais "interior"
             for (int j = 0; j < divisions; j++) {
                 float zAtual = (-z / 2) + j * (z / divisions);
                 float zAtualSup = (-z / 2) + (j + 1) * (z / divisions);
@@ -150,7 +151,7 @@ string Figuras::box(double x,double y,double z,int divisions)
                 s.append(to_string(xAtualSup) + " " + to_string(yAtualSup) + " " + to_string(zLado) + "\n");
                 s.append(to_string(xAtual) + " " + to_string(yAtualSup) + " " + to_string(zLado) + "\n");
 
-                //face trás:
+                //face trï¿½s:
                 s.append(to_string(xAtual) + " " + to_string(yAtual) + " " + to_string(-zLado) + "\n");
                 s.append(to_string(xAtualSup) + " " + to_string(yAtualSup) + " " + to_string(-zLado) + "\n");
                 s.append(to_string(xAtualSup) + " " + to_string(yAtual) + " " + to_string(-zLado) + "\n");
@@ -190,7 +191,13 @@ string Figuras::esfera(double radius,int slices,int stacks)
     return esfera.toString(); 
 }
 
-string Figuras::cone(double radius, double height, int slices, int stacks){
+string Figuras::cone(float radius, float height, int slices, int stacks){
     Cone cone(radius, height, slices, stacks);
     return cone.toString(); 
+}
+
+string Figuras::anel(float radius, int slices, int stacks, float outerR)
+{
+    Anel anel(radius, slices, stacks, outerR);
+    return anel.toString();
 }
