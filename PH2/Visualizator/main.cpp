@@ -247,16 +247,19 @@ vector<string> splitter(string &str, char delimiter) {
     return splittedStrs;
 }
 
-const char *getValueOrDefault(const char *r) {
-    return r != nullptr ? r : "0";
+const char *getValueOrDefault(const char *r, int is_color) {
+    if (r != nullptr) {
+        return r;
+    } else if (is_color == 1) return "1";
+    return "0";
 }
 
-const char *getOptionalAttribute(XMLElement *e, const char *attribute) {
-    return getValueOrDefault(e->Attribute(attribute));
+const char *getOptionalAttribute(XMLElement *e, const char *attribute, int is_color) {
+    return getValueOrDefault(e->Attribute(attribute), is_color);
 }
 
-float getFloatAttribute(XMLElement *e, const char *attribute) {
-    return strtof(getOptionalAttribute(e, attribute), nullptr);
+float getFloatAttribute(XMLElement *e, const char *attribute, int  is_color) {
+    return strtof(getOptionalAttribute(e, attribute, is_color), nullptr);
 }
 
 Action readTranslate(XMLElement *e) {
@@ -264,9 +267,9 @@ Action readTranslate(XMLElement *e) {
     action->name = "translate";
     action->translate = new struct point();
 
-    action->translate->x = getFloatAttribute(e, "X");
-    action->translate->y = getFloatAttribute(e, "Y");
-    action->translate->z = getFloatAttribute(e, "Z");
+    action->translate->x = getFloatAttribute(e, "X", 0);
+    action->translate->y = getFloatAttribute(e, "Y", 0);
+    action->translate->z = getFloatAttribute(e, "Z", 0);
 
     return action;
 }
@@ -276,10 +279,10 @@ Action readRotate(XMLElement *e) {
     action->name = "rotate";
     action->rotate = new struct rotate();
 
-    action->rotate->angle = getFloatAttribute(e, "angle");
-    action->rotate->point->x = getFloatAttribute(e, "X");
-    action->rotate->point->y = getFloatAttribute(e, "Y");
-    action->rotate->point->z = getFloatAttribute(e, "Z");
+    action->rotate->angle = getFloatAttribute(e, "angle", 0);
+    action->rotate->point->x = getFloatAttribute(e, "X", 0);
+    action->rotate->point->y = getFloatAttribute(e, "Y", 0);
+    action->rotate->point->z = getFloatAttribute(e, "Z", 0);
 
     return action;
 }
@@ -289,9 +292,9 @@ Action readScale(XMLElement *e) {
     action->name = "scale";
     action->scale = new struct point();
 
-    action->scale->x = getFloatAttribute(e, "X");
-    action->scale->y = getFloatAttribute(e, "Y");
-    action->scale->z = getFloatAttribute(e, "Z");
+    action->scale->x = getFloatAttribute(e, "X", 0);
+    action->scale->y = getFloatAttribute(e, "Y", 0);
+    action->scale->z = getFloatAttribute(e, "Z", 0);
 
     return action;
 }
@@ -299,9 +302,9 @@ Action readScale(XMLElement *e) {
 void readColor(XMLElement *e, Action action) {
     action->model->color = new struct color();
 
-    action->model->color->red = getFloatAttribute(e, "R");
-    action->model->color->green = getFloatAttribute(e, "G");
-    action->model->color->blue = getFloatAttribute(e, "B");
+    action->model->color->red = getFloatAttribute(e, "R", 1);
+    action->model->color->green = getFloatAttribute(e, "G", 1);
+    action->model->color->blue = getFloatAttribute(e, "B", 1);
 }
 
 void readFile(XMLElement *e, Action action) {
