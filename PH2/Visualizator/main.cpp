@@ -247,15 +247,15 @@ vector<string> splitter(string &str, char delimiter) {
     return splittedStrs;
 }
 
-const char* getValueOrDefault(const char* r) {
+const char *getValueOrDefault(const char *r) {
     return r != nullptr ? r : "0";
 }
 
-const char* getOptionalAttribute(XMLElement *e, const char* attribute) {
+const char *getOptionalAttribute(XMLElement *e, const char *attribute) {
     return getValueOrDefault(e->Attribute(attribute));
 }
 
-float getFloatAttribute(XMLElement *e, const char* attribute) {
+float getFloatAttribute(XMLElement *e, const char *attribute) {
     return strtof(getOptionalAttribute(e, attribute), nullptr);
 }
 
@@ -391,21 +391,7 @@ bool readConfig(const char *filename) {
 
 void keyboardCallback(unsigned char key_code, int _unused1, int _unused2) {
     switch (key_code) {
-        //Rodar a figura (direita e esquerda)
-        case 'd':
-            alpha += 22.5f;
-            break;
-        case 'e':
-            alpha -= 22.5f;
-            break;
-            //Subir ou descer (north e south)
-        case 'n':
-            y += 0.1f;
-            break;
-        case 's':
-            y -= 0.1f;
-            break;
-            //Esquerda ou direita (w e f)
+        //Esquerda ou direita (w e f)
         case 'w':
             x -= 0.1f;
             break;
