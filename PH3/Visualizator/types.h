@@ -38,7 +38,7 @@ struct group;
 typedef struct action {
     const char *name{};
     Point translate{};
-    Move movement;
+    Move movement{};
     Point scale{};
     Rotate rotate{};
     Model model{};
