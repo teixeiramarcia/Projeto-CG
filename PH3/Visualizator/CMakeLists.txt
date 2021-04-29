@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.9)
 project(visualizador)
 
 add_executable(visualizador
-        main.cpp tinyxml2.cpp
+        main.cpp load.cpp drawer.cpp tinyxml2.cpp catmull.cpp
         )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
