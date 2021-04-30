@@ -7,7 +7,8 @@
 
 #ifdef __APPLE__
 
-#include <GLUT/glut.h>
+#include <glut.h>
+
 
 #else
 #include <GL/glut.h>
@@ -222,7 +223,13 @@ void glutSetup(int argc, char **argv) {
 
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
+    glPolygonMode(GL_FRONT, GL_LINE);
+
+    glEnable(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     spherical2Cartesian();
 }

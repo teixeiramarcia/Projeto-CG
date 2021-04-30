@@ -2,6 +2,7 @@
 #define VISUALIZADOR_TYPES_H
 
 #include <vector>
+#include <glut.h>
 
 using namespace std;
 

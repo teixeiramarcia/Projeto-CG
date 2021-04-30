@@ -3,10 +3,12 @@
 #include "drawer.h"
 #include "types.h"
 #include "catmull.h"
+#include "error.h"
 
 #ifdef __APPLE__
 
-#include <GLUT/glut.h>
+#include <glut.h>
+#include <iostream>
 
 #else
 #include <GL/glut.h>
@@ -16,12 +18,25 @@
 void drawGroup(struct group *);
 
 void drawModel(Model model) {
-    glBegin(GL_TRIANGLES);
-    glColor3f(model->color->red, model->color->green, model->color->blue);
+    auto n = model->points.size() * 3;
+    auto i = 0;
+    float v[n];
+
     for (Point point : model->points) {
-        glVertex3f(point->x, point->y, point->z);
+        v[i++] = point->x;
+        v[i++] = point->y;
+        v[i++] = point->z;
     }
-    glEnd();
+
+    GLuint buffer;
+
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * n, v, GL_STATIC_DRAW);
+
+    glColor3f(model->color->red, model->color->green, model->color->blue);
+    glVertexPointer(3, GL_FLOAT, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, n);
 }
 
 void drawTranslate(Point point) {
@@ -115,6 +130,7 @@ void drawGroup(struct group *group) {
 }
 
 void drawScene(Config config) {
+    //checkGLError();
     glPolygonMode(GL_FRONT_AND_BACK, config->drawingType);
     for (Group group : config->groups) {
         drawGroup(group);

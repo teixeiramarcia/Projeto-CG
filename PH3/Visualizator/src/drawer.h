@@ -3,7 +3,7 @@
 
 #ifdef __APPLE__
 
-#include <GLUT/glut.h>
+#include <glut.h>
 #include "types.h"
 
 #else
