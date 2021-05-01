@@ -75,24 +75,39 @@ void normalize(float *a) {
     a[2] = a[2]/l;
 }
 
+float antYY[3] = {0, 1, 0};
 void transformMove(Move movement) {
-    drawMove(movement);
     float deriv[3];
+
+    drawMove(movement);
+    deriv[0] = deriv[0];
+    deriv[1] = deriv[1];
+    deriv[2] = deriv[2];
+    normalize(deriv);
     float tt = glutGet(GLUT_ELAPSED_TIME) / movement->time;
     Point point = getGlobalCatmullRomPoint(movement, tt, deriv);
     glTranslatef(point->x, point->y, point->z);
 
-    float zr[3];
-    cross(deriv, movement->axis, zr);
-    float ty[3];
-    cross(zr, deriv, ty);
-    normalize(zr);
-    normalize(deriv);
-    normalize(ty);
-    movement->axis = ty;
+    float xi[4];
+    xi[0] = deriv[0];
+    xi[1] = deriv[1];
+    xi[2] = deriv[2];
+    normalize(xi);
+
+    float zi[4];
+    cross(xi, antYY, zi);
+    normalize(zi);
+
+    float yi[4];
+    cross(zi, xi, yi);
+    normalize(yi);
+    antYY[0] = yi[0];
+    antYY[1] = yi[1];
+    antYY[2] = yi[2];
+
     float m[16];
-    //buildRotMatrix(deriv, ty, zr, m);
-    //glMultMatrixf(m);
+    buildRotMatrix(xi, yi, zi, m);
+    glMultMatrixf(m);
 }
 
 void drawRotate(Rotate rotate) {
