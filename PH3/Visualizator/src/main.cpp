@@ -60,24 +60,8 @@ void changeSize(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void renderScene() {
-    // clear buffers
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // set the camera
-    glLoadIdentity();
-    gluLookAt(camX, camY, camZ, 0.0, 0.0, 0.0, 0.0f, 1.0f, 0.0f);
-
-    glRotatef(x, 1.0, 0.0, 0.0);
-    glRotatef(y, 0.0, 1.0, 0.0);
-    glRotatef(z, 0.0, 0.0, 1.0);
-
-    // put the geometric transformations here
-    glTranslatef(x, y, z);
-    glRotatef(alpha, 0.0f, 1.0f, 0.0f);
-    glScalef(1.0f, 1.0f, 1.0f);
-
-    /* Axis drawing
+void drawAxis() {
+    /* Axis drawing */
     // X negative axis in dotted Red
     glPushAttrib(GL_ENABLE_BIT);
     glLineStipple(4, 0xAAAA);
@@ -132,8 +116,58 @@ void renderScene() {
 
     glVertex3f(0.0f, 0.0f, 0.0f);
     glVertex3f(0.0f, 0.0f, 1000.0f);
-    glEnd(); */
+    glEnd();
+}
 
+void drawOrbit(float size) {
+    for (float angle = 0.0f, xO = 0.0f, zO = 0.0f; angle <= (2.0f * M_PI); angle += 0.08f)
+    {
+        xO = size * sin(angle);
+        zO = size * cos(angle);
+        glVertex3f(xO, 0.0f, zO);
+    }
+}
+
+void drawPlanetsOrbits() {
+    glClear( GL_COLOR_BUFFER_BIT);
+    glBegin( GL_POINTS);
+    // Mercury orbit
+    drawOrbit(12.166f);
+    // Venus orbit
+    drawOrbit(13.928f);
+    // Earth orbit
+    drawOrbit(16.031f);
+    // Mars orbit
+    drawOrbit(16.9f);
+    // Jupiter orbit
+    drawOrbit(22.940f);
+    // Saturn orbit
+    drawOrbit(33.659f);
+    // Uranus orbit
+    drawOrbit(45.277f);
+    // Neptune orbit
+    drawOrbit(48.508f);
+    glEnd();
+}
+
+void renderScene() {
+    // clear buffers
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // set the camera
+    glLoadIdentity();
+    gluLookAt(camX, camY, camZ, 0.0, 0.0, 0.0, 0.0f, 1.0f, 0.0f);
+
+    glRotatef(x, 1.0, 0.0, 0.0);
+    glRotatef(y, 0.0, 1.0, 0.0);
+    glRotatef(z, 0.0, 0.0, 1.0);
+
+    // put the geometric transformations here
+    glTranslatef(x, y, z);
+    glRotatef(alpha, 0.0f, 1.0f, 0.0f);
+    glScalef(1.0f, 1.0f, 1.0f);
+
+    drawPlanetsOrbits();
     drawScene(config);
 
     // End of frame
