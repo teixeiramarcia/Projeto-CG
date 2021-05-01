@@ -3,12 +3,10 @@
 #include "drawer.h"
 #include "types.h"
 #include "catmull.h"
-#include "error.h"
 
 #ifdef __APPLE__
 
 #include <glut.h>
-#include <iostream>
 
 #else
 #include <GL/glut.h>

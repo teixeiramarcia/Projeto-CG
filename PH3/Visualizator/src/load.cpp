@@ -112,15 +112,9 @@ void readFile(XMLElement *e, Action action) {
         while (getline(file, line)) {
             vector<string> s = splitter(line, ' ');
             auto point = new struct point();
-            if (strcmp(e->Attribute("file"), "comet.3d") != 0) {
-                point->x = stof(s.at(0));
-                point->y = stof(s.at(1));
-                point->z = stof(s.at(2));
-            } else {
-                point->x = stof(s.at(0));
-                point->y = stof(s.at(2));
-                point->z = stof(s.at(1));
-            }
+            point->x = stof(s.at(0));
+            point->y = stof(s.at(1));
+            point->z = stof(s.at(2));
             size ++;
             action->model->points.push_back(point);
         }

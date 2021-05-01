@@ -19,7 +19,7 @@
             <point X="32" Y="0" Z="-12"/>
         </translate>
         <models>
-            <model file='comet.3d' R='0.961' G='0.667' B='0.882' />
+            <model file='teapot.3d' R='0.961' G='0.667' B='0.882' />
         </models>
     </group>
     <!-- Mercúrio -->
