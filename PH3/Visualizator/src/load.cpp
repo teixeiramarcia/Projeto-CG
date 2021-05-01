@@ -33,7 +33,7 @@ const char *getOptionalAttribute(XMLElement *e, const char *attribute, int is_co
     return getValueOrDefault(e->Attribute(attribute), is_color);
 }
 
-float getFloatAttribute(XMLElement *e, const char *attribute, int  is_color) {
+float getFloatAttribute(XMLElement *e, const char *attribute, int is_color) {
     return strtof(getOptionalAttribute(e, attribute, is_color), nullptr);
 }
 
@@ -115,7 +115,7 @@ void readFile(XMLElement *e, Action action) {
             point->x = stof(s.at(0));
             point->y = stof(s.at(1));
             point->z = stof(s.at(2));
-            size ++;
+            size++;
             action->model->points.push_back(point);
         }
     }
@@ -151,7 +151,7 @@ Group readGroups(XMLNode *node) {
             readModels(e, &group->actions);
         } else if (!strcmp(name, "translate")) {
             auto *e = (XMLElement *) g;
-            if(getFloatAttribute(e, "time", 0) != 0 ) {
+            if (getFloatAttribute(e, "time", 0) != 0) {
                 group->actions.push_back(readMove(e));
             } else {
                 group->actions.push_back(readTranslate(e));
