@@ -8,7 +8,7 @@
 
 typedef class Surface
 {
-    private:
+    public:
         int tesselation;
         std::vector<std::vector<std::vector<Point3D>>> patchesCtrlP;
 
@@ -24,7 +24,7 @@ typedef class Surface
         void readPatchFile(std::string filename);
 
     public:
-        Surface(const std::string &filename);
+        Surface(const std::string &filename,int tesselation);
         ~Surface();
         std::vector<Triangle> getSurfaceTriangles();
         std::string toString();

@@ -77,7 +77,6 @@ vector<Triangle> Surface::getTrianglesIn2Vectors(const vector<Point3D> &v1,const
 
     for(int i=0;i<sections;i++)
     {
-
         Triangle t1(v1[i],v2[i],v2[i+1]);
         triangles.push_back(t1);
         Triangle t2(v1[i],v2[i+1],v1[i+1]);
@@ -178,7 +177,7 @@ void Surface::readPatchFile(string filename)
     int nPontosControlo;
     vector<vector<int>> indicesPatches;
     vector<Point3D> pontosControlo;
-
+    cout << filename << endl;
     // falha abertura ficheiro
     if(!fin.is_open())
     {
