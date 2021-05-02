@@ -109,7 +109,7 @@ string Generator::modelo()
 
         model = Figuras::cone(radius,height,slices,stacks);
     }
-    else if(*this->figura=="anel")
+    else if(*this->figura=="ring")
     {
         float radius = this->argsFig[0];
         int slices = this->argsFig[1];
