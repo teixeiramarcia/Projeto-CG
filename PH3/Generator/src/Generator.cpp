@@ -12,7 +12,10 @@ Generator::Generator(int argc,char** argv)
     this->isValid = false;
 
     if(argc<3)
-        return;
+    {
+        cerr << "INVALID COMMAND" << endl;
+        exit(1);
+    }
 
     this->figura = new string(argv[1]);
 
@@ -143,5 +146,5 @@ void Generator::writeModelo()
     out << model;
     out.close();
     model.clear();
-    cout << "Ficheiro Gerado: " << file << endl;
+    cout << "Output file created: " << file << endl;
 }
