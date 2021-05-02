@@ -209,8 +209,8 @@ void Surface::readPatchFile(string filename)
     {
         double x,y,z;
         fin >> x; fin.get();
-        fin >> y; fin.get();
         fin >> z; fin.get();
+        fin >> y; fin.get();
         pontosControlo.push_back(Point3D(x,y,z));
     }
 

@@ -7,7 +7,5 @@ int main(int argc,char** argv)
 
     generator.writeModelo();
 
-    std::cout << "Ficheiro gerado: " << *generator.fileName << std::endl;
-
     return 1;
 }

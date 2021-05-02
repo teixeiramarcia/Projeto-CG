@@ -8,25 +8,25 @@ using namespace std;
 Generator::Generator(int argc,char** argv)
 {
     int nArgsFig;
-    
+
     this->isValid = false;
-    
-    if(argc<=3)
+
+    if(argc<3)
         return;
-    
+
     this->figura = new string(argv[1]);
-    
+
     // figura e/ou numero argumentos invalidos
     if(!(*this->figura=="plane" && argc==4 || *this->figura=="box" && argc==7 || *this->figura=="sphere" && argc==6
-        || *this->figura=="cone" && argc==7 || *this->figura=="ring" && argc==7))
+        || *this->figura=="cone" && argc==7 || *this->figura=="ring" && argc==7 || argc==3))
     {
         cerr << "Invalid figure or number of arguments\n";
         exit(1);
     }
-    
+
     string name(argv[argc-1]);
     this->fileName = new string(PATH+name);
-    
+
     if(*this->figura=="plane")
         nArgsFig = 1;
     else if(*this->figura=="box")
@@ -35,9 +35,11 @@ Generator::Generator(int argc,char** argv)
         nArgsFig = 3;
     else if(*this->figura=="cone")
         nArgsFig = 4;
-    else
+    else if(*this->figura=="ring")
         nArgsFig = 4;
-    
+    else
+        nArgsFig = 1;
+
     for(int i=2; nArgsFig>0; i++,nArgsFig--)
     {
         double n;
@@ -51,8 +53,8 @@ Generator::Generator(int argc,char** argv)
         }
         argsFig.push_back(n);
     }
-    
-    this->isValid = true;            
+
+    this->isValid = true;
 }
 
 Generator::~Generator()
@@ -92,7 +94,7 @@ string Generator::modelo()
         double radius = this->argsFig[0];
         int slices = this->argsFig[1];
         int stacks = this->argsFig[2];
-        
+
         model = Figuras::esfera(radius,slices,stacks);
     }
     else if(*this->figura=="cone")
@@ -104,7 +106,7 @@ string Generator::modelo()
 
         model = Figuras::cone(radius,height,slices,stacks);
     }
-    else
+    else if(*this->figura=="anel")
     {
         float radius = this->argsFig[0];
         int slices = this->argsFig[1];
@@ -113,15 +115,33 @@ string Generator::modelo()
 
         model = Figuras::anel(radius,slices,stacks,outerR);
     }
+    else
+    {
+        model = Figuras::surface(*this->figura,this->argsFig[0]);
+    }
     return model;
 }
 
 void Generator::writeModelo()
 {
-    ofstream out(*this->fileName);
+    string file;
+
+    if(this->argsFig.size()==1)
+    {
+        // abandonado devido a possibilidade de ficheiro fornecido conter path
+        /*istringstream ss(*this->figura);
+        getline(ss,file,'.');
+        file = "./"+file;*/
+        file = "./surface";
+    }
+    else
+        file = *this->fileName;
+
+    ofstream out(file);
     string model = this->modelo();
 
     out << model;
     out.close();
     model.clear();
+    cout << "Ficheiro Gerado: " << file << endl;
 }

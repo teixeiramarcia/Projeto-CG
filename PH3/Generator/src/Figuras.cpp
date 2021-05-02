@@ -2,6 +2,7 @@
 #include "../headers/Esfera.h"
 #include "../headers/Cone.h"
 #include "../headers/Anel.h"
+#include "../headers/Surface.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ string Figuras::box(double x,double y,double z,int divisions)
 {
     string s;
     int nTriangulos, nPontos = -1;
-    
+
     if (divisions > 1) {
         //se existem divis�es (� opcional):
         nTriangulos = (6 * divisions^2) * 2;   //n�mero de tri�ngulos
@@ -42,16 +43,16 @@ string Figuras::box(double x,double y,double z,int divisions)
         nPontos = 36;
     }
     //escrever no ficheiro o n�mero de pontos:
-    s.append(to_string(nPontos) + "\n"); 
+    s.append(to_string(nPontos) + "\n");
 
     //uma vez que a caixa vai estar centrada na origem:
     float hMax = y / 2;
     float xLado = x / 2;
     float zLado = z / 2;
-    
+
     //caso n�o existam divis�es (divisions = 0 ou 1):
     if (divisions <= 1) {
-        //anota��es, tendo como refer�ncia a representa��o habitual dos eixos: 
+        //anota��es, tendo como refer�ncia a representa��o habitual dos eixos:
         //calculo e escrita dos pontos dos tri�ngulos da tampa (ordem m�o direita, y fixo):
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(zLado) + "\n");
         s.append(to_string(xLado) + " " + to_string(hMax) + " " + to_string(-zLado) + "\n");
@@ -112,7 +113,7 @@ string Figuras::box(double x,double y,double z,int divisions)
         //caso tenham sido requeridas divis�es:
         float xAtual, yAtual, zAtual;
 
-        //anota��es, tendo como refer�ncia a representa��o habitual dos eixos: 
+        //anota��es, tendo como refer�ncia a representa��o habitual dos eixos:
         for (int i = 0; i < divisions; i++) {
             float xAtual = (-x / 2) + i * (x / divisions);
             float xAtualSup = (-x / 2) + (i + 1) * (x / divisions);
@@ -188,16 +189,22 @@ string Figuras::box(double x,double y,double z,int divisions)
 string Figuras::esfera(double radius,int slices,int stacks)
 {
     Esfera esfera(radius,slices,stacks);
-    return esfera.toString(); 
+    return esfera.toString();
 }
 
 string Figuras::cone(float radius, float height, int slices, int stacks){
     Cone cone(radius, height, slices, stacks);
-    return cone.toString(); 
+    return cone.toString();
 }
 
 string Figuras::anel(float radius, int slices, int stacks, float outerR)
 {
     Anel anel(radius, slices, stacks, outerR);
     return anel.toString();
+}
+
+string Figuras::surface(string filename,int tesselation)
+{
+    Surface surface(filename,tesselation);
+    return surface.toString();
 }
