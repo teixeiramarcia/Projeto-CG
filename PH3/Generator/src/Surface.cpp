@@ -148,6 +148,9 @@ string Surface::toString()
 
     vector<Triangle> triangles = this->getSurfaceTriangles();
 
+    int nPontos = triangles.size()*3;
+    s.append(to_string(nPontos)+"\n");
+
     for(auto &t : triangles)
         s.append(t.toString());
 
