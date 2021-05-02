@@ -120,8 +120,7 @@ void drawAxis() {
 }
 
 void drawOrbit(float size) {
-    for (float angle = 0.0f, xO = 0.0f, zO = 0.0f; angle <= (2.0f * M_PI); angle += 0.08f)
-    {
+    for (float angle = 0.0f, xO = 0.0f, zO = 0.0f; angle <= (2.0f * M_PI); angle += 0.08f) {
         xO = size * sin(angle);
         zO = size * cos(angle);
         glVertex3f(xO, 0.0f, zO);
@@ -129,8 +128,8 @@ void drawOrbit(float size) {
 }
 
 void drawPlanetsOrbits() {
-    glClear( GL_COLOR_BUFFER_BIT);
-    glBegin( GL_POINTS);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glBegin(GL_POINTS);
     // Mercury orbit
     drawOrbit(12.166f);
     // Venus orbit
