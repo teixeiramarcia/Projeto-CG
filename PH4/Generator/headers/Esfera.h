@@ -14,8 +14,7 @@ typedef class Esfera
         std::vector<PPoint3D>* getYoZStackInterceptionPoints();
         PPoint3D rotatePoint_Yaxis(PPoint3D p,double angle);
         std::vector<std::vector<PPoint3D>*> getVerticalLinePoints();
-        std::vector<PTriangle>* getSliceTriangles(std::vector<PPoint3D>* s1,std::vector<PPoint3D>* s2);
-        void freeTriangles(std::vector<std::vector<PTriangle>*>& vec);
+        std::vector<Triangle> getSliceTriangles(std::vector<PPoint3D>* s1,std::vector<PPoint3D>* s2);
 
     public:
         Esfera(double r,int slices,int stacks);
@@ -25,7 +24,7 @@ typedef class Esfera
         int getSlices();
         int getStacks();
         double getZCoord(double x,double y);
-        std::vector<std::vector<PTriangle>*> getTriangles();
+        std::vector<Triangle> getTriangles();
         std::string toString();
 
 }* PEsfera;

@@ -64,6 +64,26 @@ Point3D Point3D::operator*<Point3D>(const Point3D &p)
     );
 }
 
+template<>
+Point3D Point3D::operator*<int>(const int &p)
+{
+    return Point3D(
+        this->x * p,
+        this->y * p,
+        this->z * p
+    );
+}
+
+template<>
+Point3D Point3D::operator*<double>(const double &p)
+{
+    return Point3D(
+        this->x * p,
+        this->y * p,
+        this->z * p
+    );
+}
+
 Point3D Point3D::operator+(const Point3D &p)
 {
     return Point3D(

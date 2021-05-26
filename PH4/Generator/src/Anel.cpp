@@ -16,8 +16,8 @@ Anel::Anel(float raio, int slices, int stacks, float outerR){
 Anel::~Anel(){}
 
 //Construção do Anel
-vector<PTriangle> Anel::desenhaAnel(){
-    vector<PTriangle> estrutura;
+vector<Triangle> Anel::desenhaAnel(){
+    vector<Triangle> estrutura;
     float raio = this->raio;
     float outerR = this->outerR;
     int slices = this->slices;
@@ -40,9 +40,9 @@ vector<PTriangle> Anel::desenhaAnel(){
             float nextcadj = cos(angulo + (2*M_PI/slices)) * raio2;
             float nextcopt = sin(angulo + (2*M_PI/slices)) * raio2;
 
-            estrutura.push_back(new Triangle(catadj, altura, catopt, nextcadj, altura1, nextcopt, nextcatadj, altura, nextcatopt));
+            estrutura.push_back(Triangle(catadj, altura, catopt, nextcadj, altura1, nextcopt, nextcatadj, altura, nextcatopt));
 
-            estrutura.push_back(new Triangle(catadj, altura, catopt, cadj, altura1, copt, nextcadj, altura1, nextcopt));
+            estrutura.push_back(Triangle(catadj, altura, catopt, cadj, altura1, copt, nextcadj, altura1, nextcopt));
         }
     }
     /*for(int i = 0; i > - stacks/2; i--){
@@ -70,22 +70,14 @@ vector<PTriangle> Anel::desenhaAnel(){
     return estrutura;
 }
 
-void Anel::freeTriangles(vector<PTriangle>& vec){
-    for(auto t : vec)
-        delete(t);
-    vec.clear();
-}
-
 string Anel::toString(){
-    vector<PTriangle> triangles = this->desenhaAnel();
+    vector<Triangle> triangles = this->desenhaAnel();
     string s;
 
     int nPontos = triangles.size() * 3;
     s.append(to_string(nPontos)+"\n");
     for(auto triangle : triangles)
-        s.append(triangle->toString());
-
-    this->freeTriangles(triangles);
+        s.append(triangle.toString());
 
     return s;
 }

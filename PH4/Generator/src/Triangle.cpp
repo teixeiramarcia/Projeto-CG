@@ -48,6 +48,14 @@ void Triangle::setPoint(int i,PPoint3D p)
     this->points[i]->y = p->y;
 }
 
+bool Triangle::contains(Point3D& p) const
+{
+    for(auto p2: this->points)
+        if(p.x==p2->x && p.y==p2->y && p.z==p2->z)
+            return true;
+    return false;
+}
+
 string Triangle::toString()
 {
     string s;

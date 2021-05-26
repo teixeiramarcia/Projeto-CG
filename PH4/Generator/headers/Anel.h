@@ -9,13 +9,11 @@ private:
     float raio, outerR;
     int slices,stacks;
 
-    void freeTriangles(std::vector<PTriangle>& vec);
-
 public:
     Anel(float raio, int slices, int stacks, float outerR);
     ~Anel();
 
-    std::vector<PTriangle> desenhaAnel();
+    std::vector<Triangle> desenhaAnel();
     std::string toString();
 
 }* PAnel;

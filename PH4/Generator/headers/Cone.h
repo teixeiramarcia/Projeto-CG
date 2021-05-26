@@ -9,13 +9,11 @@ typedef class Cone{
         float raio, altura;
         int slices,stacks;
 
-        void freeTriangles(std::vector<PTriangle>& vec);
-
     public:
         Cone(float raio, float altura, int slices, int stacks);
         ~Cone();
 
-        std::vector<PTriangle> desenhaCone();
+        std::vector<Triangle> desenhaCone();
         std::string toString();
 
 }* PCone;

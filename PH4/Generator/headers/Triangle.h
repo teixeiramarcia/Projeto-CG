@@ -19,6 +19,7 @@ typedef class Triangle
         PPoint3D getPoint(int i);
         std::vector<PPoint3D> getPoints() const;
         void setPoint(int i,PPoint3D p);
+        bool contains(Point3D& p) const;
         std::string toString();
 
 }* PTriangle;
