@@ -58,9 +58,17 @@ typedef struct group {
     vector<Action> actions;
 } *Group;
 
+typedef struct light {
+    const char *type;
+    int posX;
+    int posY;
+    int posZ;
+} *Light;
+
 typedef struct config {
     int drawingType;
     vector<Group> groups;
+    vector<Light> lights;
 } *Config;
 
 #endif //VISUALIZADOR_TYPES_H

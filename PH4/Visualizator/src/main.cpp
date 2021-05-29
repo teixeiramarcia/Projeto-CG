@@ -259,6 +259,8 @@ void glutSetup(int argc, char **argv) {
     glEnable(GL_VERTEX_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     spherical2Cartesian();

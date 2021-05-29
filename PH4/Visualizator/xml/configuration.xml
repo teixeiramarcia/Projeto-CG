@@ -22,16 +22,16 @@
             <model file='teapot.3d' R='0.961' G='0.667' B='0.882' />
         </models>
     </group> -->
-    <!-- Mercúrio
+    <!-- Mercúrio -->
     <group>
         <rotate time='5000' X='0' Y='1' Z='0' />
         <translate X='12' Y='0' Z='2' />
         <scale X='0.4' Y='0.4' Z='0.4'/>
         <rotate time='5000' X='0' Y='1' Z='0' />
         <models>
-            <model file='sphere.3d' R='0.702' G='0.412' B='0.227' />
+            <model file='sphere.3d' texture='sun.jpg' />
         </models>
-    </group> -->
+    </group>
     <!-- Vénus
     <group>
         <rotate time='10000' X='0' Y='1' Z='0' />

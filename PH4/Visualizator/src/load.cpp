@@ -247,6 +247,14 @@ Group readGroups(XMLNode *node) {
     return group;
 }
 
+/*void readLights(XMLElement *element) {
+    while (element != nullptr) {
+        Group group = readLights(element);
+        config->groups.push_back(group);
+        element = (XMLElement *) element->NextSibling();
+    }
+}*/
+
 Config readConfig(const char *filename) {
     Config config;
 
@@ -256,6 +264,11 @@ Config readConfig(const char *filename) {
     XMLNode *root = document.FirstChildElement("scene");
     if (root == nullptr) return nullptr;
     XMLElement *element = root->FirstChildElement("group");
+
+    //if(element != nullptr) {
+    //    readLights(element);
+   // }
+    //element = root->FirstChildElement("group");
 
     config = new struct config();
 
