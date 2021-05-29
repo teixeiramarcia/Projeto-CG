@@ -112,7 +112,7 @@ void readFile(XMLElement *e, Action action) {
         getline(file, line);
         num_points = stoi(line);
         int size = 0;
-        while (getline(file, line) && size < num_points - 1) {
+        while (size < num_points && getline(file, line)) {
             vector<string> s = splitter(line, ' ');
             auto point = new struct point();
             point->x = stof(s.at(0));
@@ -126,7 +126,7 @@ void readFile(XMLElement *e, Action action) {
         if (getline(file, line)) {
             num_normals = stoi(line);
             if (num_normals != 0) {
-                while (getline(file, line) && size < num_normals - 1) {
+                while (size < num_normals && getline(file, line)) {
                     vector<string> s = splitter(line, ' ');
                     auto point = new struct point();
                     point->x = stof(s.at(0));
@@ -136,14 +136,14 @@ void readFile(XMLElement *e, Action action) {
                     size++;
                 }
             } else {
-                action->model->normals = {0,0,0};
+                action->model->normals = {};
             }
             size = 0;
             int num_textures;
             getline(file, line);
             num_textures = stoi(line);
             if (num_textures != 0) {
-                while (getline(file, line) && size < num_textures - 1) {
+                while (size < num_textures && getline(file, line)) {
                     vector<string> s = splitter(line, ' ');
                     auto texture_point = new struct texture_point();
                     texture_point->x = stof(s.at(0));
@@ -152,7 +152,7 @@ void readFile(XMLElement *e, Action action) {
                     size++;
                 }
             } else {
-                action->model->texture_points = {0,0};
+                action->model->texture_points = {};
             }
         }
     }
@@ -178,11 +178,11 @@ GLuint loadTexture(const string& s) {
     glGenTextures(1,&texID);
 
     glBindTexture(GL_TEXTURE_2D,texID);
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_S,		GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_T,		GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MAG_FILTER,   	GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
     glGenerateMipmap(GL_TEXTURE_2D);
@@ -198,10 +198,10 @@ Action readModel(XMLElement *e) {
     action->model = new struct model();
     if (e->Attribute("texture") != nullptr) {
         action->model->texture =  loadTexture(e->Attribute("texture"));
+    } else {
+        readColor(e, action);
     }
-
     readFile(e, action);
-    readColor(e, action);
 
     return action;
 }

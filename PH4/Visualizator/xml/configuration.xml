@@ -1,9 +1,9 @@
 <scene>
     <!-- Sol -->
     <group>
-        <scale X='10' Y='10' Z='10'/>
+        <scale X='2' Y='2' Z='2'/>
         <models>
-            <model file='sphere.3d' R='1' G='0.686' B='0' />
+            <model file='sphere.3d' texture='sun.jpg' />
         </models>
     </group>
     <!-- Cometa

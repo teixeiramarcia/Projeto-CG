@@ -5,6 +5,7 @@
 #include "drawer.h"
 #ifdef __APPLE__
 #include <glut.h>
+#include <cmath>
 #else
 #include <GL/glut.h>
 #include <GL/gl.h>
@@ -125,6 +126,7 @@ void drawOrbit(float size) {
 void drawPlanetsOrbits() {
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_POINTS);
+    glColor3f(1,1,1);
     // Mercury orbit
     drawOrbit(12.166f);
     // Venus orbit
@@ -252,15 +254,11 @@ void glutSetup(int argc, char **argv) {
     // OpenGL settings
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
-    glPolygonMode(GL_FRONT, GL_LINE);
+    glPolygonMode(GL_FRONT, GL_FILL);
 
     glEnable(GL_VERTEX_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnable(GL_TEXTURE_2D);
-
-
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     spherical2Cartesian();
@@ -272,15 +270,15 @@ int main(int argc, char **argv) {
         return 2;
     }
 
+    glutSetup(argc, argv);
+
     config = readConfig(argv[1]);
 
     if (config == nullptr) {
         return 3;
     }
 
-    config->drawingType = GL_LINE;
-
-    glutSetup(argc, argv);
+    config->drawingType = GL_FILL;
 
     // enter GLUT's main loop
     glutMainLoop();

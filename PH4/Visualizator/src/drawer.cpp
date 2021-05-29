@@ -8,6 +8,7 @@
 
 #include <glut.h>
 #include <iostream>
+#include <cmath>
 
 #else
 #include <GL/glut.h>
@@ -16,10 +17,8 @@
 
 void drawGroup(struct group *);
 
-void drawModel(Model model) {
+void drawModelSimple(Model model) {
     auto points = model->points.size() * 3;
-    auto normals = model->normals.size() * 3;
-    auto textures = model->texture_points.size() * 2;
 
     //Points
     float v[points];
@@ -31,74 +30,107 @@ void drawModel(Model model) {
         v[i++] = point->z;
     }
 
-    //Normals
-    float n[normals];
-
-    i = 0;
-    for (Point point : model->normals) {
-        n[i++] = point->x;
-        n[i++] = point->y;
-        n[i++] = point->z;
-    }
-    float infoN = sizeof(n)/sizeof(n[0]);
-
-    //Texture
-    float t[textures];
-    i = 0;
-    for (Texture_point point : model->texture_points) {
-        t[i++] = point->x;
-        t[i++] = point->y;
-    }
-
-    float infoT = sizeof(t)/sizeof(t[0]);
     GLuint buffer_points;
-    GLuint buffer_normals;
-    GLuint buffer_textures;
 
     //Points
     glGenBuffers(1, &buffer_points);
     glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * points, v, GL_STATIC_DRAW);
 
-    //Normals
-    //if(infoN != 0) {
+    glColor3f(model->color->red, model->color->green, model->color->blue);
+    glVertexPointer(3, GL_FLOAT, 0, nullptr);
+    glDrawArrays(GL_TRIANGLES, 0, points);
+}
+
+void drawModel(Model model) {
+    auto points = model->points.size() * 3;
+    auto normals = model->normals.size() * 3;
+    auto textures = model->texture_points.size() * 2;
+
+    if (normals == 0 && textures == 0) {
+        drawModelSimple(model);
+    } else {
+        //Points
+        float v[points];
+
+        auto i = 0;
+        for (Point point : model->points) {
+            v[i++] = point->x;
+            v[i++] = point->y;
+            v[i++] = point->z;
+        }
+
+        //Normals
+        float n[normals];
+
+        i = 0;
+        for (Point point : model->normals) {
+            n[i++] = point->x;
+            n[i++] = point->y;
+            n[i++] = point->z;
+        }
+        float infoN = sizeof(n)/sizeof(n[0]);
+
+        //Texture
+        float t[textures];
+        i = 0;
+        for (Texture_point point : model->texture_points) {
+            t[i++] = point->x;
+            t[i++] = point->y;
+        }
+
+        float infoT = sizeof(t)/sizeof(t[0]);
+        GLuint buffer_points;
+        GLuint buffer_normals;
+        GLuint buffer_textures;
+
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        //Points
+        glGenBuffers(1, &buffer_points);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * points, v, GL_STATIC_DRAW);
+
+        //Normals
+        //if(infoN != 0) {
         glGenBuffers(1, &buffer_normals);
         glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals, n, GL_STATIC_DRAW);
-    //}
+        //}
 
-    //Texture
-    //if(infoT != 0) {
+        //Texture
+        //if(infoT != 0) {
         glGenBuffers(1, &buffer_textures);
         glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textures, t, GL_STATIC_DRAW);
-    //}
+        //}
 
-    if (model->color != nullptr) {
-        glColor3f(model->color->red, model->color->green, model->color->blue);
-        //glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
-        glVertexPointer(3, GL_FLOAT, 0, nullptr);
-        //glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
-        //if(infoN != 0) {
+        if (model->color != nullptr) {
+            glColor3f(model->color->red, model->color->green, model->color->blue);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
+            glVertexPointer(3, GL_FLOAT, 0, nullptr);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
+            //if(infoN != 0) {
             glNormalPointer(GL_FLOAT, 0, nullptr);
-        //}
-        //glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
-        //if(infoT != 0) {
+            //}
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
+            //if(infoT != 0) {
             glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
-        //}
-        glDrawArrays(GL_TRIANGLES, 0, points);
-    } else {
-        glBindTexture(GL_TEXTURE_2D, model->texture);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
-        glVertexPointer(3, GL_FLOAT, 0, nullptr);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
-        glNormalPointer(GL_FLOAT, 0, nullptr);
-        glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
-        glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
-        glDrawArrays(GL_TRIANGLES, 0, points);
-        glBindTexture(GL_TEXTURE_2D, 0);
+            //}
+            glDrawArrays(GL_TRIANGLES, 0, points);
+        } else {
+            glBindTexture(GL_TEXTURE_2D, model->texture);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
+            glVertexPointer(3, GL_FLOAT, 0, nullptr);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
+            glNormalPointer(GL_FLOAT, 0, nullptr);
+            glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
+            glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
+            glDrawArrays(GL_TRIANGLES, 0, points);
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
     }
-    std::cout << buffer_textures;
 }
 
 void drawTranslate(Point point) {
