@@ -79,5 +79,7 @@ string Anel::toString(){
     for(auto triangle : triangles)
         s.append(triangle.toString());
 
+    s.append(Normals::toString(triangles));
+
     return s;
 }

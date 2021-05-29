@@ -1,7 +1,8 @@
 #pragma once
 #include<vector>
-#include"Point3D.h"
-#include"Triangle.h"
+#include "Point3D.h"
+#include "Triangle.h"
+#include "./Normals.h"
 #include<string>
 #include<fstream>
 #include<iostream>

@@ -154,6 +154,8 @@ string Surface::toString()
     for(auto &t : triangles)
         s.append(t.toString());
 
+    s.append(Normals::toString(triangles));
+
     return s;
 }
 

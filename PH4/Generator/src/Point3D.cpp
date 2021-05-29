@@ -44,16 +44,6 @@ std::string Point3D::toString()
     return s;
 }
 
-template<typename T>
-Point3D Point3D::operator*(const T &v)
-{
-    return Point3D(
-        this->x * v,
-        this->y * v,
-        this->z * v
-    );
-}
-
 template<>
 Point3D Point3D::operator*<Point3D>(const Point3D &p)
 {
@@ -61,26 +51,6 @@ Point3D Point3D::operator*<Point3D>(const Point3D &p)
         this->x * p.x,
         this->y * p.y,
         this->z * p.z
-    );
-}
-
-template<>
-Point3D Point3D::operator*<int>(const int &p)
-{
-    return Point3D(
-        this->x * p,
-        this->y * p,
-        this->z * p
-    );
-}
-
-template<>
-Point3D Point3D::operator*<double>(const double &p)
-{
-    return Point3D(
-        this->x * p,
-        this->y * p,
-        this->z * p
     );
 }
 

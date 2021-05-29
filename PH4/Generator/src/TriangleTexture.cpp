@@ -48,7 +48,7 @@ void TriangleTexture::setPoint(int i,PPoint2D p)
     this->points[i]->y = p->y;
 }
 
-bool Triangle::contains(Point2D& p) const
+bool TriangleTexture::contains(Point2D& p) const
 {
     for(auto p2: this->points)
         if(p.x==p2->x && p.y==p2->y)

@@ -3,6 +3,7 @@
 #include <math.h>
 #include "./Point3D.h"
 #include "./Triangle.h"
+#include "./Normals.h"
 
 typedef class Cone{
     private:

@@ -15,5 +15,5 @@ class Normals
 
     public:
         static std::vector<Point3D> getNormals(std::vector<Triangle>& figure);
-        static void toString(std::vector<Triangle>& figure);
+        static std::string toString(std::vector<Triangle>& figure);
 };

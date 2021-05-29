@@ -5,6 +5,7 @@
 #include "./Point3D.h"
 #include "./Triangle.h"
 #include "./Point2D.h"
+#include "./Normals.h"
 #include "./TriangleTexture.h"
 
 typedef class Esfera

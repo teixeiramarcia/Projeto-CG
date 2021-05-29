@@ -274,10 +274,11 @@ string Esfera::toString()
     for(auto triang: triangles)
         s.append(triang.toString());
 
-    s.append("\n\n\n");
+    s.append( Normals::toString(triangles) );
+
     vector<TriangleTexture> trianglesTexture = this->getTrianglesTexture();
     int nSlicesPiecesTexture = trianglesTexture.size();
-    int nPontosTexture = trianglesTexture.size()*2;
+    int nPontosTexture = trianglesTexture.size()*3;
 
     s.append(to_string(nPontosTexture)+"\n");
 

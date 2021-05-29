@@ -16,7 +16,14 @@ typedef class Point3D
         Point3D operator+(const Point3D &p);
 
         template<typename T>
-        Point3D operator*(const T &n);
+        Point3D operator*(const T &n)
+        {
+            return Point3D(
+                this->x * n,
+                this->y * n,
+                this->z * n
+            );
+        }
 
         std::string toString();
 
@@ -24,9 +31,3 @@ typedef class Point3D
 
 template<>
 Point3D Point3D::operator*<Point3D>(const Point3D &p);
-
-template<>
-Point3D Point3D::operator*<int>(const int &p);
-
-template<>
-Point3D Point3D::operator*<double>(const double &p);

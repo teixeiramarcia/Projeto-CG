@@ -9,7 +9,7 @@ Point3D Normals::getVector(Point3D& p1,Point3D& p2)
 
 double Normals::normaVector(Point3D& vec)
 {
-    return sqrt( vec.x*vec.x + vec.y+vec.y + vec.z+vec.z );
+    return sqrt( vec.x*vec.x + vec.y*vec.y + vec.z*vec.z );
 }
 
 Point3D Normals::getNormalOf2Vector(Point3D& v1,Point3D& v2)
@@ -77,13 +77,18 @@ vector<Point3D> Normals::getNormals(vector<Triangle>& figure)
     return normals;
 }
 
-void Normals::toString(vector<Triangle>& figure)
+string Normals::toString(vector<Triangle>& figure)
 {
     vector<Point3D> normals = Normals::getNormals(figure);
     string s;
+
+    s.append(to_string(normals.size()) + "\n");
+
     for(auto p: normals)
     {
         s.append(p.toString());
         s.append("\n");
     }
+
+    return s;
 }
