@@ -256,6 +256,10 @@ void glutSetup(int argc, char **argv) {
 
     glEnable(GL_VERTEX_ARRAY);
     glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnable(GL_TEXTURE_2D);
+
 
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);

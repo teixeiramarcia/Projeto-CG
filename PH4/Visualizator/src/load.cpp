@@ -109,9 +109,10 @@ void readFile(XMLElement *e, Action action) {
     if (file.is_open()) {
         string line;
         int num_points = 0;
-        getline(file, line) >> num_points;
+        getline(file, line);
+        num_points = stoi(line);
         int size = 0;
-        while (getline(file, line) && size < num_points) {
+        while (getline(file, line) && size < num_points - 1) {
             vector<string> s = splitter(line, ' ');
             auto point = new struct point();
             point->x = stof(s.at(0));
@@ -122,30 +123,37 @@ void readFile(XMLElement *e, Action action) {
         }
         size = 0;
         int num_normals;
-        if (getline(file, line) >> num_normals) {
-            while (getline(file, line) && size < num_normals) {
-                vector<string> s = splitter(line, ' ');
-                auto point = new struct point();
-                point->x = stof(s.at(0));
-                point->y = stof(s.at(1));
-                point->z = stof(s.at(2));
-                action->model->normals.push_back(point);
-                size++;
+        if (getline(file, line)) {
+            num_normals = stoi(line);
+            if (num_normals != 0) {
+                while (getline(file, line) && size < num_normals - 1) {
+                    vector<string> s = splitter(line, ' ');
+                    auto point = new struct point();
+                    point->x = stof(s.at(0));
+                    point->y = stof(s.at(1));
+                    point->z = stof(s.at(2));
+                    action->model->normals.push_back(point);
+                    size++;
+                }
+            } else {
+                action->model->normals = {0,0,0};
             }
             size = 0;
             int num_textures;
-            getline(file, line) >> num_textures;
-            while (getline(file, line) && size < num_textures) {
-                vector<string> s = splitter(line, ' ');
-                auto texture_point = new struct texture_point();
-                texture_point->x = stof(s.at(0));
-                texture_point->y = stof(s.at(1));
-                action->model->texture_points.push_back(texture_point);
-                size++;
+            getline(file, line);
+            num_textures = stoi(line);
+            if (num_textures != 0) {
+                while (getline(file, line) && size < num_textures - 1) {
+                    vector<string> s = splitter(line, ' ');
+                    auto texture_point = new struct texture_point();
+                    texture_point->x = stof(s.at(0));
+                    texture_point->y = stof(s.at(1));
+                    action->model->texture_points.push_back(texture_point);
+                    size++;
+                }
+            } else {
+                action->model->texture_points = {0,0};
             }
-        } else {
-            action->model->normals = {};
-            action->model->texture_points = {};
         }
     }
     file.close();

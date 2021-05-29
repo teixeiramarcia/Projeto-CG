@@ -7,6 +7,7 @@
 #ifdef __APPLE__
 
 #include <glut.h>
+#include <iostream>
 
 #else
 #include <GL/glut.h>
@@ -39,16 +40,17 @@ void drawModel(Model model) {
         n[i++] = point->y;
         n[i++] = point->z;
     }
+    float infoN = sizeof(n)/sizeof(n[0]);
 
     //Texture
     float t[textures];
-
     i = 0;
     for (Texture_point point : model->texture_points) {
         t[i++] = point->x;
         t[i++] = point->y;
     }
 
+    float infoT = sizeof(t)/sizeof(t[0]);
     GLuint buffer_points;
     GLuint buffer_normals;
     GLuint buffer_textures;
@@ -59,29 +61,44 @@ void drawModel(Model model) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * points, v, GL_STATIC_DRAW);
 
     //Normals
-    glGenBuffers(1, &buffer_normals);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals, n, GL_STATIC_DRAW);
+    //if(infoN != 0) {
+        glGenBuffers(1, &buffer_normals);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * normals, n, GL_STATIC_DRAW);
+    //}
 
     //Texture
-    glGenBuffers(1, &buffer_textures);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textures, t, GL_STATIC_DRAW);
+    //if(infoT != 0) {
+        glGenBuffers(1, &buffer_textures);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * textures, t, GL_STATIC_DRAW);
+    //}
 
     if (model->color != nullptr) {
         glColor3f(model->color->red, model->color->green, model->color->blue);
+        //glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
         glVertexPointer(3, GL_FLOAT, 0, nullptr);
-        glNormalPointer(GL_FLOAT, 0, nullptr);
-        glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
+        //glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
+        //if(infoN != 0) {
+            glNormalPointer(GL_FLOAT, 0, nullptr);
+        //}
+        //glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
+        //if(infoT != 0) {
+            glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
+        //}
         glDrawArrays(GL_TRIANGLES, 0, points);
     } else {
-        glVertexPointer(3, GL_FLOAT, 0, nullptr);
-        glNormalPointer(GL_FLOAT, 0, nullptr);
-        glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
         glBindTexture(GL_TEXTURE_2D, model->texture);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
+        glVertexPointer(3, GL_FLOAT, 0, nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);
+        glNormalPointer(GL_FLOAT, 0, nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, buffer_textures);
+        glTexCoordPointer(2, GL_FLOAT, 0, nullptr);
         glDrawArrays(GL_TRIANGLES, 0, points);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+    std::cout << buffer_textures;
 }
 
 void drawTranslate(Point point) {
