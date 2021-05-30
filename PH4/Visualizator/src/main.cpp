@@ -3,9 +3,12 @@
 #include "types.h"
 #include "load.h"
 #include "drawer.h"
+
 #ifdef __APPLE__
+
 #include <glut.h>
 #include <cmath>
+
 #else
 #include <GL/glut.h>
 #include <GL/gl.h>
@@ -126,7 +129,7 @@ void drawOrbit(float size) {
 void drawPlanetsOrbits() {
     glClear(GL_COLOR_BUFFER_BIT);
     glBegin(GL_POINTS);
-    glColor3f(1,1,1);
+    glColor3f(1, 1, 1);
     // Mercury orbit
     drawOrbit(12.166f);
     // Venus orbit
@@ -149,7 +152,7 @@ void drawPlanetsOrbits() {
 void enableLights() {
     vector<Light> lights = config->lights;
     for (Light light: lights) {
-       float pos[4] = {light->posX, light->posY, light->posZ, 1.0};
+        float pos[4] = {light->posX, light->posY, light->posZ, 1.0};
         glLightfv(GL_LIGHT0, GL_POSITION, pos);
     }
 }

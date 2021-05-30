@@ -159,25 +159,25 @@ void readFile(XMLElement *e, Action action) {
     file.close();
 }
 
-GLuint loadTexture(const string& s) {
-    unsigned int t,tw,th;
+GLuint loadTexture(const string &s) {
+    unsigned int t, tw, th;
     unsigned char *texData;
     unsigned int texID;
 
     ilInit();
     ilEnable(IL_ORIGIN_SET);
     ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-    ilGenImages(1,&t);
+    ilGenImages(1, &t);
     ilBindImage(t);
-    ilLoadImage((ILstring)s.c_str());
+    ilLoadImage((ILstring) s.c_str());
     tw = ilGetInteger(IL_IMAGE_WIDTH);
     th = ilGetInteger(IL_IMAGE_HEIGHT);
     ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
     texData = ilGetData();
 
-    glGenTextures(1,&texID);
+    glGenTextures(1, &texID);
 
-    glBindTexture(GL_TEXTURE_2D,texID);
+    glBindTexture(GL_TEXTURE_2D, texID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -197,7 +197,7 @@ Action readModel(XMLElement *e) {
     action->name = "model";
     action->model = new struct model();
     if (e->Attribute("texture") != nullptr) {
-        action->model->texture =  loadTexture(e->Attribute("texture"));
+        action->model->texture = loadTexture(e->Attribute("texture"));
         action->model->emissiveR = getFloatAttribute(e, "emR", 0);
         action->model->emissiveG = getFloatAttribute(e, "emG", 0);
         action->model->emissiveB = getFloatAttribute(e, "emB", 0);
@@ -288,7 +288,7 @@ Config readConfig(const char *filename) {
 
     config = new struct config();
 
-    if(root->FirstChildElement("lights")) {
+    if (root->FirstChildElement("lights")) {
         readLights(root->FirstChildElement("lights"), config);
     }
 
