@@ -7,7 +7,6 @@
 #ifdef __APPLE__
 
 #include <glut.h>
-#include <iostream>
 #include <cmath>
 
 #else
@@ -69,7 +68,7 @@ void drawModel(Model model) {
             n[i++] = point->y;
             n[i++] = point->z;
         }
-        float infoN = sizeof(n)/sizeof(n[0]);
+        float infoN = sizeof(n) / sizeof(n[0]);
 
         //Texture
         float t[textures];
@@ -79,7 +78,7 @@ void drawModel(Model model) {
             t[i++] = point->y;
         }
 
-        float infoT = sizeof(t)/sizeof(t[0]);
+        float infoT = sizeof(t) / sizeof(t[0]);
         GLuint buffer_points;
         GLuint buffer_normals;
         GLuint buffer_textures;
