@@ -121,6 +121,8 @@ void drawModel(Model model) {
             glDrawArrays(GL_TRIANGLES, 0, points);
         } else {
             glBindTexture(GL_TEXTURE_2D, model->texture);
+            float emission[4] = {model->emissiveR, model->emissiveG, model->emissiveB, 1.0};
+            glMaterialfv(GL_FRONT, GL_EMISSION, emission);
             glBindBuffer(GL_ARRAY_BUFFER, buffer_points);
             glVertexPointer(3, GL_FLOAT, 0, nullptr);
             glBindBuffer(GL_ARRAY_BUFFER, buffer_normals);

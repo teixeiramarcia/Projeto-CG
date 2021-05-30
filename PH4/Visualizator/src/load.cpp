@@ -198,9 +198,13 @@ Action readModel(XMLElement *e) {
     action->model = new struct model();
     if (e->Attribute("texture") != nullptr) {
         action->model->texture =  loadTexture(e->Attribute("texture"));
+        action->model->emissiveR = getFloatAttribute(e, "emR", 0);
+        action->model->emissiveG = getFloatAttribute(e, "emG", 0);
+        action->model->emissiveB = getFloatAttribute(e, "emB", 0);
     } else {
         readColor(e, action);
     }
+
     readFile(e, action);
 
     return action;
@@ -247,13 +251,31 @@ Group readGroups(XMLNode *node) {
     return group;
 }
 
-/*void readLights(XMLElement *element) {
+Light readLight(XMLElement *element) {
+    auto light = new struct light();
+    light->type = element->Attribute("type");
+    light->posX = stof(element->Attribute("posX"));
+    light->posY = stof(element->Attribute("posY"));
+    light->posY = stof(element->Attribute("posZ"));
+    return light;
+}
+
+void readLights(XMLElement *element, Config config) {
+    element = element->FirstChildElement("light");
     while (element != nullptr) {
-        Group group = readLights(element);
+        Light light = readLight(element);
+        config->lights.push_back(light);
+        element = (XMLElement *) element->NextSibling();
+    }
+}
+
+void readGroup(XMLElement *element, Config config) {
+    while (element != nullptr) {
+        Group group = readGroups(element);
         config->groups.push_back(group);
         element = (XMLElement *) element->NextSibling();
     }
-}*/
+}
 
 Config readConfig(const char *filename) {
     Config config;
@@ -263,20 +285,15 @@ Config readConfig(const char *filename) {
     if (result != XML_SUCCESS) return nullptr;
     XMLNode *root = document.FirstChildElement("scene");
     if (root == nullptr) return nullptr;
-    XMLElement *element = root->FirstChildElement("group");
-
-    //if(element != nullptr) {
-    //    readLights(element);
-   // }
-    //element = root->FirstChildElement("group");
 
     config = new struct config();
 
-    while (element != nullptr) {
-        Group group = readGroups(element);
-        config->groups.push_back(group);
-        element = (XMLElement *) element->NextSibling();
+    if(root->FirstChildElement("lights")) {
+        readLights(root->FirstChildElement("lights"), config);
     }
 
+    if (root->FirstChildElement("group")) {
+        readGroup(root->FirstChildElement("group"), config);
+    }
     return config;
 }

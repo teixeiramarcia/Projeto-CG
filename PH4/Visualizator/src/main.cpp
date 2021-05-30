@@ -146,6 +146,14 @@ void drawPlanetsOrbits() {
     glEnd();
 }
 
+void enableLights() {
+    vector<Light> lights = config->lights;
+    for (Light light: lights) {
+       float pos[4] = {light->posX, light->posY, light->posZ, 1.0};
+        glLightfv(GL_LIGHT0, GL_POSITION, pos);
+    }
+}
+
 void renderScene() {
     // clear buffers
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -157,6 +165,8 @@ void renderScene() {
     glRotatef(x, 1.0, 0.0, 0.0);
     glRotatef(y, 0.0, 1.0, 0.0);
     glRotatef(z, 0.0, 0.0, 1.0);
+
+    enableLights();
 
     // put the geometric transformations here
     glTranslatef(x, y, z);

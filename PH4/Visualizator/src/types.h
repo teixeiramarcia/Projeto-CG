@@ -39,6 +39,9 @@ typedef struct model {
     vector<Point> normals;
     vector<Texture_point> texture_points;
     GLuint texture;
+    float emissiveR;
+    float emissiveG;
+    float emissiveB;
     Color color{};
 } *Model;
 
@@ -60,9 +63,9 @@ typedef struct group {
 
 typedef struct light {
     const char *type;
-    int posX;
-    int posY;
-    int posZ;
+    float posX;
+    float posY;
+    float posZ;
 } *Light;
 
 typedef struct config {
